@@ -41,7 +41,7 @@ print(torch.__version__)
 !python classifiers/trainer_cla_md.py --config cfgs/dgcnn-cla.yaml --exp_name DGCNN_CE_SR2 --src SR2 --loss CE --wandb_proj AML_DAAI_proj23_24 --wandb_group sng-am
 ```
 
-_For PointNet, we used a batch size of 16 due to memory concerns, using the default value required more memory than what is granted by Google Colabs and thus, was unfeasible to us._
+_For PointNet, we used a batch size of 16 due to memory concerns, using the default value of 64 required more memory than what is granted by Google Colabs and thus, was unfeasible to us._
 ```python
 # Train PointNet2 on SR1
 !python classifiers/trainer_cla_md.py --config cfgs/pn2-msg.yaml --exp_name PointNet2_CE_SR1 --src SR1 --batch_size 16 --loss CE_ls --wandb_proj AML_DAAI_proj23_24 --wandb_group sng-am
