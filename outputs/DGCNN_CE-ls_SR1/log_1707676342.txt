@@ -1,0 +1,1306 @@
+Arguments: Namespace(local_rank=None, use_sync_bn=False, use_amp=False, script_mode='train', config='cfgs/dgcnn-cla.yaml', seed=1, epochs=250, batch_size=64, num_workers=4, resume=None, apply_fix_cellphone=True, data_root='./3D_OS_release_data', checkpoints_dir='outputs', exp_name='DGCNN_CE-ls_SR1', eval_step=1, save_step=10, ckpt_path=None, src='SR1', sonn_split='main_split', sonn_h5_name='objectdataset.h5', augm_set='rw', grad_norm_clip=-1, num_points=1024, num_points_test=2048, wandb_name=None, wandb_group='sng-am', wandb_proj='AML_DAAI_proj23_24', loss='CE_ls', cs=False, cs_gan_lr=0.0002, cs_beta=0.1, save_feats=None, corruption=None, tar1='none', tar2='none', log_dir='outputs/DGCNN_CE-ls_SR1', tb_dir='outputs/DGCNN_CE-ls_SR1/tb-logs', models_dir='outputs/DGCNN_CE-ls_SR1/models', backup_dir='outputs/DGCNN_CE-ls_SR1/backup-code')
+Config: {'optimizer': {'type': 'sgd', 'skip_wd': [], 'weight_decay': 0.0001, 'kwargs': {'lr': 0.1, 'momentum': 0.9}}, 'scheduler': {'type': 'CosLR', 'kwargs': {'t_initial': 250, 'cycle_limit': 1, 'lr_min': 0.0001}}, 'model': {'ENCO_NAME': 'DGCNN', 'k': 20, 'emb_dims': 1024, 'dropout': 0.5, 'cla_input_dim': 2048, 'act': 'leakyrelu'}}
+World size: 1
+
+SR1 train synset: {'chair': 0, 'bookshelf': 1, 'door': 2, 'sink': 3, 'sofa': 4}
+Source: SR1
+Num training classes: 5
+Model: 
+Classifier(
+  (enco): DGCNN(
+    (conv1): Sequential(
+      (0): Conv2d(6, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): LeakyReLU(negative_slope=0.2)
+    )
+    (conv2): Sequential(
+      (0): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): LeakyReLU(negative_slope=0.2)
+    )
+    (conv3): Sequential(
+      (0): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): LeakyReLU(negative_slope=0.2)
+    )
+    (conv4): Sequential(
+      (0): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): LeakyReLU(negative_slope=0.2)
+    )
+    (conv5): Sequential(
+      (0): Conv1d(512, 1024, kernel_size=(1,), stride=(1,), bias=False)
+      (1): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (2): LeakyReLU(negative_slope=0.2)
+    )
+  )
+  (penultimate): Sequential(
+    (0): Linear(in_features=2048, out_features=512, bias=False)
+    (1): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2)
+    (3): Dropout(p=0.5, inplace=False)
+    (4): Linear(in_features=512, out_features=256, bias=False)
+  )
+  (head): Sequential(
+    (0): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (1): LeakyReLU(negative_slope=0.2)
+    (2): Dropout(p=0.5, inplace=False)
+    (3): Linear(in_features=256, out_features=5, bias=True)
+  )
+)
+
+param count: 
+1.8003 M
+Loss: CE_ls
+
+it: [10/37-1/250], rank: [1/1], Loss: 1.4007, Loss avg: 1.4279, lr: 0.100000, BT: 0.80, DT: 0.00
+it: [20/37-1/250], rank: [1/1], Loss: 1.4256, Loss avg: 1.3941, lr: 0.100000, BT: 0.81, DT: 0.00
+it: [30/37-1/250], rank: [1/1], Loss: 1.3148, Loss avg: 1.3621, lr: 0.100000, BT: 0.81, DT: 0.00
+Train [1/250]	rank: [1/1], Loss: 1.3545, Acc: 0.6913, Bal Acc: 0.5055, BT: 1.18, DT: 0.02,  epoch time: 43.73
+Test [1/250]	Acc: 0.6875, Bal Acc: 0.4776
+it: [10/37-2/250], rank: [1/1], Loss: 1.1757, Loss avg: 1.2997, lr: 0.099996, BT: 0.83, DT: 0.00
+it: [20/37-2/250], rank: [1/1], Loss: 1.2324, Loss avg: 1.2502, lr: 0.099996, BT: 0.83, DT: 0.00
+it: [30/37-2/250], rank: [1/1], Loss: 1.1224, Loss avg: 1.2150, lr: 0.099996, BT: 0.85, DT: 0.00
+Train [2/250]	rank: [1/1], Loss: 1.1945, Acc: 0.7846, Bal Acc: 0.5735, BT: 0.86, DT: 0.03,  epoch time: 31.74
+Test [2/250]	Acc: 0.8562, Bal Acc: 0.6188
+it: [10/37-3/250], rank: [1/1], Loss: 1.2578, Loss avg: 1.0809, lr: 0.099984, BT: 0.86, DT: 0.00
+it: [20/37-3/250], rank: [1/1], Loss: 1.0239, Loss avg: 1.0831, lr: 0.099984, BT: 0.87, DT: 0.00
+it: [30/37-3/250], rank: [1/1], Loss: 0.9790, Loss avg: 1.0708, lr: 0.099984, BT: 0.87, DT: 0.00
+Train [3/250]	rank: [1/1], Loss: 1.0655, Acc: 0.8467, Bal Acc: 0.6516, BT: 0.88, DT: 0.02,  epoch time: 32.73
+Test [3/250]	Acc: 0.8844, Bal Acc: 0.7362
+it: [10/37-4/250], rank: [1/1], Loss: 1.0868, Loss avg: 1.0132, lr: 0.099965, BT: 0.86, DT: 0.00
+it: [20/37-4/250], rank: [1/1], Loss: 0.9829, Loss avg: 1.0163, lr: 0.099965, BT: 0.86, DT: 0.00
+it: [30/37-4/250], rank: [1/1], Loss: 1.0041, Loss avg: 1.0196, lr: 0.099965, BT: 0.85, DT: 0.00
+Train [4/250]	rank: [1/1], Loss: 1.0103, Acc: 0.8923, Bal Acc: 0.7894, BT: 0.88, DT: 0.02,  epoch time: 32.54
+Test [4/250]	Acc: 0.8688, Bal Acc: 0.7913
+it: [10/37-5/250], rank: [1/1], Loss: 0.9152, Loss avg: 0.9493, lr: 0.099937, BT: 0.86, DT: 0.01
+it: [20/37-5/250], rank: [1/1], Loss: 1.0464, Loss avg: 0.9523, lr: 0.099937, BT: 0.86, DT: 0.00
+it: [30/37-5/250], rank: [1/1], Loss: 0.9355, Loss avg: 0.9461, lr: 0.099937, BT: 0.86, DT: 0.00
+Train [5/250]	rank: [1/1], Loss: 0.9432, Acc: 0.9206, Bal Acc: 0.8268, BT: 0.87, DT: 0.02,  epoch time: 32.25
+Test [5/250]	Acc: 0.9563, Bal Acc: 0.9387
+it: [10/37-6/250], rank: [1/1], Loss: 0.8690, Loss avg: 0.9202, lr: 0.099901, BT: 0.87, DT: 0.00
+it: [20/37-6/250], rank: [1/1], Loss: 0.9125, Loss avg: 0.9089, lr: 0.099901, BT: 0.87, DT: 0.00
+it: [30/37-6/250], rank: [1/1], Loss: 0.9064, Loss avg: 0.9029, lr: 0.099901, BT: 0.87, DT: 0.00
+Train [6/250]	rank: [1/1], Loss: 0.9003, Acc: 0.9544, Bal Acc: 0.8941, BT: 0.88, DT: 0.02,  epoch time: 32.59
+Test [6/250]	Acc: 0.9531, Bal Acc: 0.9233
+it: [10/37-7/250], rank: [1/1], Loss: 0.9922, Loss avg: 0.9197, lr: 0.099858, BT: 0.86, DT: 0.00
+it: [20/37-7/250], rank: [1/1], Loss: 0.9194, Loss avg: 0.9167, lr: 0.099858, BT: 0.86, DT: 0.00
+it: [30/37-7/250], rank: [1/1], Loss: 0.8728, Loss avg: 0.9068, lr: 0.099858, BT: 0.86, DT: 0.00
+Train [7/250]	rank: [1/1], Loss: 0.9041, Acc: 0.9489, Bal Acc: 0.8743, BT: 0.89, DT: 0.03,  epoch time: 32.87
+Test [7/250]	Acc: 0.9563, Bal Acc: 0.9345
+it: [10/37-8/250], rank: [1/1], Loss: 0.9027, Loss avg: 0.8954, lr: 0.099807, BT: 0.86, DT: 0.00
+it: [20/37-8/250], rank: [1/1], Loss: 0.9142, Loss avg: 0.8956, lr: 0.099807, BT: 0.86, DT: 0.00
+it: [30/37-8/250], rank: [1/1], Loss: 0.8670, Loss avg: 0.8910, lr: 0.099807, BT: 0.87, DT: 0.00
+Train [8/250]	rank: [1/1], Loss: 0.8912, Acc: 0.9578, Bal Acc: 0.8971, BT: 0.88, DT: 0.02,  epoch time: 32.45
+Test [8/250]	Acc: 0.9594, Bal Acc: 0.9207
+it: [10/37-9/250], rank: [1/1], Loss: 0.8454, Loss avg: 0.8706, lr: 0.099748, BT: 0.86, DT: 0.00
+it: [20/37-9/250], rank: [1/1], Loss: 0.8859, Loss avg: 0.8763, lr: 0.099748, BT: 0.87, DT: 0.01
+it: [30/37-9/250], rank: [1/1], Loss: 0.9033, Loss avg: 0.8804, lr: 0.099748, BT: 0.87, DT: 0.00
+Train [9/250]	rank: [1/1], Loss: 0.8801, Acc: 0.9662, Bal Acc: 0.9144, BT: 0.88, DT: 0.02,  epoch time: 32.61
+Test [9/250]	Acc: 0.9187, Bal Acc: 0.8865
+it: [10/37-10/250], rank: [1/1], Loss: 0.8861, Loss avg: 0.8676, lr: 0.099681, BT: 0.86, DT: 0.00
+it: [20/37-10/250], rank: [1/1], Loss: 0.8794, Loss avg: 0.8696, lr: 0.099681, BT: 0.86, DT: 0.00
+it: [30/37-10/250], rank: [1/1], Loss: 0.8797, Loss avg: 0.8697, lr: 0.099681, BT: 0.86, DT: 0.00
+Train [10/250]	rank: [1/1], Loss: 0.8703, Acc: 0.9700, Bal Acc: 0.9303, BT: 0.87, DT: 0.01,  epoch time: 32.46
+Test [10/250]	Acc: 0.9594, Bal Acc: 0.9365
+it: [10/37-11/250], rank: [1/1], Loss: 0.8499, Loss avg: 0.8755, lr: 0.099606, BT: 0.86, DT: 0.00
+it: [20/37-11/250], rank: [1/1], Loss: 0.8402, Loss avg: 0.8675, lr: 0.099606, BT: 0.87, DT: 0.00
+it: [30/37-11/250], rank: [1/1], Loss: 0.8731, Loss avg: 0.8625, lr: 0.099606, BT: 0.87, DT: 0.00
+Train [11/250]	rank: [1/1], Loss: 0.8633, Acc: 0.9726, Bal Acc: 0.9322, BT: 0.88, DT: 0.02,  epoch time: 32.45
+Test [11/250]	Acc: 0.9750, Bal Acc: 0.9550
+it: [10/37-12/250], rank: [1/1], Loss: 0.8897, Loss avg: 0.8697, lr: 0.099524, BT: 0.86, DT: 0.00
+it: [20/37-12/250], rank: [1/1], Loss: 0.9056, Loss avg: 0.8670, lr: 0.099524, BT: 0.86, DT: 0.00
+it: [30/37-12/250], rank: [1/1], Loss: 0.8612, Loss avg: 0.8639, lr: 0.099524, BT: 0.86, DT: 0.00
+Train [12/250]	rank: [1/1], Loss: 0.8635, Acc: 0.9700, Bal Acc: 0.9249, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [12/250]	Acc: 0.9781, Bal Acc: 0.9692
+it: [10/37-13/250], rank: [1/1], Loss: 0.8352, Loss avg: 0.8560, lr: 0.099433, BT: 0.87, DT: 0.00
+it: [20/37-13/250], rank: [1/1], Loss: 0.8552, Loss avg: 0.8561, lr: 0.099433, BT: 0.87, DT: 0.00
+it: [30/37-13/250], rank: [1/1], Loss: 0.8270, Loss avg: 0.8554, lr: 0.099433, BT: 0.87, DT: 0.00
+Train [13/250]	rank: [1/1], Loss: 0.8548, Acc: 0.9755, Bal Acc: 0.9444, BT: 0.89, DT: 0.03,  epoch time: 33.00
+Test [13/250]	Acc: 0.9688, Bal Acc: 0.9439
+it: [10/37-14/250], rank: [1/1], Loss: 0.8632, Loss avg: 0.8568, lr: 0.099335, BT: 0.86, DT: 0.00
+it: [20/37-14/250], rank: [1/1], Loss: 0.8531, Loss avg: 0.8549, lr: 0.099335, BT: 0.87, DT: 0.00
+it: [30/37-14/250], rank: [1/1], Loss: 0.8433, Loss avg: 0.8520, lr: 0.099335, BT: 0.87, DT: 0.00
+Train [14/250]	rank: [1/1], Loss: 0.8520, Acc: 0.9747, Bal Acc: 0.9426, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [14/250]	Acc: 0.9719, Bal Acc: 0.9629
+it: [10/37-15/250], rank: [1/1], Loss: 0.8340, Loss avg: 0.8463, lr: 0.099229, BT: 0.86, DT: 0.00
+it: [20/37-15/250], rank: [1/1], Loss: 0.8783, Loss avg: 0.8511, lr: 0.099229, BT: 0.87, DT: 0.00
+it: [30/37-15/250], rank: [1/1], Loss: 0.8168, Loss avg: 0.8475, lr: 0.099229, BT: 0.86, DT: 0.00
+Train [15/250]	rank: [1/1], Loss: 0.8490, Acc: 0.9797, Bal Acc: 0.9547, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [15/250]	Acc: 0.9656, Bal Acc: 0.9430
+it: [10/37-16/250], rank: [1/1], Loss: 0.8607, Loss avg: 0.8527, lr: 0.099115, BT: 0.86, DT: 0.00
+it: [20/37-16/250], rank: [1/1], Loss: 0.8205, Loss avg: 0.8501, lr: 0.099115, BT: 0.86, DT: 0.00
+it: [30/37-16/250], rank: [1/1], Loss: 0.8187, Loss avg: 0.8463, lr: 0.099115, BT: 0.87, DT: 0.00
+Train [16/250]	rank: [1/1], Loss: 0.8461, Acc: 0.9785, Bal Acc: 0.9427, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [16/250]	Acc: 0.9719, Bal Acc: 0.9539
+it: [10/37-17/250], rank: [1/1], Loss: 0.8270, Loss avg: 0.8406, lr: 0.098994, BT: 0.87, DT: 0.01
+it: [20/37-17/250], rank: [1/1], Loss: 0.8297, Loss avg: 0.8438, lr: 0.098994, BT: 0.86, DT: 0.00
+it: [30/37-17/250], rank: [1/1], Loss: 0.8314, Loss avg: 0.8430, lr: 0.098994, BT: 0.86, DT: 0.00
+Train [17/250]	rank: [1/1], Loss: 0.8432, Acc: 0.9806, Bal Acc: 0.9505, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [17/250]	Acc: 0.9688, Bal Acc: 0.9454
+it: [10/37-18/250], rank: [1/1], Loss: 0.8578, Loss avg: 0.8330, lr: 0.098865, BT: 0.87, DT: 0.00
+it: [20/37-18/250], rank: [1/1], Loss: 0.8535, Loss avg: 0.8372, lr: 0.098865, BT: 0.86, DT: 0.00
+it: [30/37-18/250], rank: [1/1], Loss: 0.8378, Loss avg: 0.8395, lr: 0.098865, BT: 0.86, DT: 0.00
+Train [18/250]	rank: [1/1], Loss: 0.8426, Acc: 0.9806, Bal Acc: 0.9444, BT: 0.88, DT: 0.02,  epoch time: 32.53
+Test [18/250]	Acc: 0.9812, Bal Acc: 0.9621
+it: [10/37-19/250], rank: [1/1], Loss: 0.8355, Loss avg: 0.8371, lr: 0.098728, BT: 0.86, DT: 0.00
+it: [20/37-19/250], rank: [1/1], Loss: 0.9017, Loss avg: 0.8514, lr: 0.098728, BT: 0.87, DT: 0.00
+it: [30/37-19/250], rank: [1/1], Loss: 0.8508, Loss avg: 0.8568, lr: 0.098728, BT: 0.86, DT: 0.00
+Train [19/250]	rank: [1/1], Loss: 0.8562, Acc: 0.9704, Bal Acc: 0.9369, BT: 0.89, DT: 0.03,  epoch time: 33.02
+Test [19/250]	Acc: 0.9812, Bal Acc: 0.9704
+it: [10/37-20/250], rank: [1/1], Loss: 0.8496, Loss avg: 0.8476, lr: 0.098583, BT: 0.87, DT: 0.00
+it: [20/37-20/250], rank: [1/1], Loss: 0.8213, Loss avg: 0.8426, lr: 0.098583, BT: 0.87, DT: 0.00
+it: [30/37-20/250], rank: [1/1], Loss: 0.8241, Loss avg: 0.8456, lr: 0.098583, BT: 0.87, DT: 0.00
+Train [20/250]	rank: [1/1], Loss: 0.8456, Acc: 0.9793, Bal Acc: 0.9430, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [20/250]	Acc: 0.9781, Bal Acc: 0.9662
+it: [10/37-21/250], rank: [1/1], Loss: 0.8405, Loss avg: 0.8478, lr: 0.098431, BT: 0.87, DT: 0.00
+it: [20/37-21/250], rank: [1/1], Loss: 0.8540, Loss avg: 0.8421, lr: 0.098431, BT: 0.87, DT: 0.02
+it: [30/37-21/250], rank: [1/1], Loss: 0.8577, Loss avg: 0.8434, lr: 0.098431, BT: 0.87, DT: 0.00
+Train [21/250]	rank: [1/1], Loss: 0.8403, Acc: 0.9852, Bal Acc: 0.9554, BT: 0.88, DT: 0.02,  epoch time: 32.52
+Test [21/250]	Acc: 0.9750, Bal Acc: 0.9578
+it: [10/37-22/250], rank: [1/1], Loss: 0.8136, Loss avg: 0.8232, lr: 0.098271, BT: 0.86, DT: 0.00
+it: [20/37-22/250], rank: [1/1], Loss: 0.8173, Loss avg: 0.8259, lr: 0.098271, BT: 0.86, DT: 0.00
+it: [30/37-22/250], rank: [1/1], Loss: 0.8424, Loss avg: 0.8306, lr: 0.098271, BT: 0.86, DT: 0.00
+Train [22/250]	rank: [1/1], Loss: 0.8316, Acc: 0.9856, Bal Acc: 0.9596, BT: 0.88, DT: 0.01,  epoch time: 32.51
+Test [22/250]	Acc: 0.9688, Bal Acc: 0.9250
+it: [10/37-23/250], rank: [1/1], Loss: 0.8256, Loss avg: 0.8313, lr: 0.098103, BT: 0.86, DT: 0.00
+it: [20/37-23/250], rank: [1/1], Loss: 0.8142, Loss avg: 0.8347, lr: 0.098103, BT: 0.87, DT: 0.00
+it: [30/37-23/250], rank: [1/1], Loss: 0.8774, Loss avg: 0.8357, lr: 0.098103, BT: 0.86, DT: 0.00
+Train [23/250]	rank: [1/1], Loss: 0.8350, Acc: 0.9873, Bal Acc: 0.9629, BT: 0.88, DT: 0.02,  epoch time: 32.49
+Test [23/250]	Acc: 0.9656, Bal Acc: 0.9346
+it: [10/37-24/250], rank: [1/1], Loss: 0.8353, Loss avg: 0.8364, lr: 0.097928, BT: 0.87, DT: 0.00
+it: [20/37-24/250], rank: [1/1], Loss: 0.8391, Loss avg: 0.8399, lr: 0.097928, BT: 0.86, DT: 0.00
+it: [30/37-24/250], rank: [1/1], Loss: 0.8578, Loss avg: 0.8388, lr: 0.097928, BT: 0.87, DT: 0.00
+Train [24/250]	rank: [1/1], Loss: 0.8377, Acc: 0.9823, Bal Acc: 0.9581, BT: 0.89, DT: 0.02,  epoch time: 32.85
+Test [24/250]	Acc: 0.9656, Bal Acc: 0.9450
+it: [10/37-25/250], rank: [1/1], Loss: 0.8419, Loss avg: 0.8353, lr: 0.097745, BT: 0.87, DT: 0.00
+it: [20/37-25/250], rank: [1/1], Loss: 0.8129, Loss avg: 0.8361, lr: 0.097745, BT: 0.86, DT: 0.00
+it: [30/37-25/250], rank: [1/1], Loss: 0.8100, Loss avg: 0.8346, lr: 0.097745, BT: 0.86, DT: 0.00
+Train [25/250]	rank: [1/1], Loss: 0.8327, Acc: 0.9840, Bal Acc: 0.9597, BT: 0.88, DT: 0.02,  epoch time: 32.77
+Test [25/250]	Acc: 0.9688, Bal Acc: 0.9697
+it: [10/37-26/250], rank: [1/1], Loss: 0.8104, Loss avg: 0.8275, lr: 0.097555, BT: 0.86, DT: 0.00
+it: [20/37-26/250], rank: [1/1], Loss: 0.8092, Loss avg: 0.8289, lr: 0.097555, BT: 0.87, DT: 0.01
+it: [30/37-26/250], rank: [1/1], Loss: 0.8282, Loss avg: 0.8271, lr: 0.097555, BT: 0.86, DT: 0.00
+Train [26/250]	rank: [1/1], Loss: 0.8281, Acc: 0.9903, Bal Acc: 0.9730, BT: 0.88, DT: 0.01,  epoch time: 32.50
+Test [26/250]	Acc: 0.9688, Bal Acc: 0.9698
+it: [10/37-27/250], rank: [1/1], Loss: 0.8478, Loss avg: 0.8280, lr: 0.097358, BT: 0.87, DT: 0.00
+it: [20/37-27/250], rank: [1/1], Loss: 0.8186, Loss avg: 0.8262, lr: 0.097358, BT: 0.87, DT: 0.00
+it: [30/37-27/250], rank: [1/1], Loss: 0.8448, Loss avg: 0.8275, lr: 0.097358, BT: 0.87, DT: 0.00
+Train [27/250]	rank: [1/1], Loss: 0.8269, Acc: 0.9861, Bal Acc: 0.9647, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [27/250]	Acc: 0.9781, Bal Acc: 0.9772
+it: [10/37-28/250], rank: [1/1], Loss: 0.8217, Loss avg: 0.8243, lr: 0.097152, BT: 0.86, DT: 0.00
+it: [20/37-28/250], rank: [1/1], Loss: 0.8110, Loss avg: 0.8262, lr: 0.097152, BT: 0.86, DT: 0.00
+it: [30/37-28/250], rank: [1/1], Loss: 0.8363, Loss avg: 0.8287, lr: 0.097152, BT: 0.86, DT: 0.00
+Train [28/250]	rank: [1/1], Loss: 0.8261, Acc: 0.9886, Bal Acc: 0.9711, BT: 0.90, DT: 0.02,  epoch time: 33.33
+Test [28/250]	Acc: 0.9812, Bal Acc: 0.9790
+it: [10/37-29/250], rank: [1/1], Loss: 0.8105, Loss avg: 0.8261, lr: 0.096940, BT: 0.87, DT: 0.01
+it: [20/37-29/250], rank: [1/1], Loss: 0.8160, Loss avg: 0.8255, lr: 0.096940, BT: 0.86, DT: 0.00
+it: [30/37-29/250], rank: [1/1], Loss: 0.8365, Loss avg: 0.8342, lr: 0.096940, BT: 0.86, DT: 0.00
+Train [29/250]	rank: [1/1], Loss: 0.8337, Acc: 0.9793, Bal Acc: 0.9479, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [29/250]	Acc: 0.9750, Bal Acc: 0.9672
+it: [10/37-30/250], rank: [1/1], Loss: 0.8099, Loss avg: 0.8325, lr: 0.096720, BT: 0.87, DT: 0.00
+it: [20/37-30/250], rank: [1/1], Loss: 0.8131, Loss avg: 0.8305, lr: 0.096720, BT: 0.86, DT: 0.00
+it: [30/37-30/250], rank: [1/1], Loss: 0.8121, Loss avg: 0.8321, lr: 0.096720, BT: 0.87, DT: 0.00
+Train [30/250]	rank: [1/1], Loss: 0.8306, Acc: 0.9869, Bal Acc: 0.9616, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [30/250]	Acc: 0.9812, Bal Acc: 0.9702
+it: [10/37-31/250], rank: [1/1], Loss: 0.8214, Loss avg: 0.8282, lr: 0.096492, BT: 0.86, DT: 0.00
+it: [20/37-31/250], rank: [1/1], Loss: 0.8360, Loss avg: 0.8333, lr: 0.096492, BT: 0.87, DT: 0.00
+it: [30/37-31/250], rank: [1/1], Loss: 0.8174, Loss avg: 0.8308, lr: 0.096492, BT: 0.86, DT: 0.00
+Train [31/250]	rank: [1/1], Loss: 0.8302, Acc: 0.9861, Bal Acc: 0.9698, BT: 0.89, DT: 0.03,  epoch time: 33.04
+Test [31/250]	Acc: 0.9594, Bal Acc: 0.9088
+it: [10/37-32/250], rank: [1/1], Loss: 0.8281, Loss avg: 0.8357, lr: 0.096258, BT: 0.86, DT: 0.00
+it: [20/37-32/250], rank: [1/1], Loss: 0.8428, Loss avg: 0.8320, lr: 0.096258, BT: 0.87, DT: 0.00
+it: [30/37-32/250], rank: [1/1], Loss: 0.8249, Loss avg: 0.8301, lr: 0.096258, BT: 0.87, DT: 0.00
+Train [32/250]	rank: [1/1], Loss: 0.8326, Acc: 0.9835, Bal Acc: 0.9560, BT: 0.88, DT: 0.02,  epoch time: 32.70
+Test [32/250]	Acc: 0.9812, Bal Acc: 0.9783
+it: [10/37-33/250], rank: [1/1], Loss: 0.8135, Loss avg: 0.8249, lr: 0.096016, BT: 0.87, DT: 0.00
+it: [20/37-33/250], rank: [1/1], Loss: 0.8357, Loss avg: 0.8289, lr: 0.096016, BT: 0.86, DT: 0.00
+it: [30/37-33/250], rank: [1/1], Loss: 0.8133, Loss avg: 0.8262, lr: 0.096016, BT: 0.87, DT: 0.00
+Train [33/250]	rank: [1/1], Loss: 0.8272, Acc: 0.9894, Bal Acc: 0.9744, BT: 0.88, DT: 0.02,  epoch time: 32.49
+Test [33/250]	Acc: 0.9812, Bal Acc: 0.9681
+it: [10/37-34/250], rank: [1/1], Loss: 0.8622, Loss avg: 0.8297, lr: 0.095766, BT: 0.86, DT: 0.00
+it: [20/37-34/250], rank: [1/1], Loss: 0.8147, Loss avg: 0.8243, lr: 0.095766, BT: 0.86, DT: 0.00
+it: [30/37-34/250], rank: [1/1], Loss: 0.8434, Loss avg: 0.8254, lr: 0.095766, BT: 0.87, DT: 0.00
+Train [34/250]	rank: [1/1], Loss: 0.8248, Acc: 0.9899, Bal Acc: 0.9714, BT: 0.88, DT: 0.02,  epoch time: 32.58
+Test [34/250]	Acc: 0.9781, Bal Acc: 0.9685
+it: [10/37-35/250], rank: [1/1], Loss: 0.8336, Loss avg: 0.8225, lr: 0.095510, BT: 0.87, DT: 0.01
+it: [20/37-35/250], rank: [1/1], Loss: 0.8178, Loss avg: 0.8283, lr: 0.095510, BT: 0.87, DT: 0.00
+it: [30/37-35/250], rank: [1/1], Loss: 0.8120, Loss avg: 0.8281, lr: 0.095510, BT: 0.86, DT: 0.00
+Train [35/250]	rank: [1/1], Loss: 0.8274, Acc: 0.9865, Bal Acc: 0.9693, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [35/250]	Acc: 0.9781, Bal Acc: 0.9693
+it: [10/37-36/250], rank: [1/1], Loss: 0.8094, Loss avg: 0.8173, lr: 0.095246, BT: 0.86, DT: 0.00
+it: [20/37-36/250], rank: [1/1], Loss: 0.8044, Loss avg: 0.8220, lr: 0.095246, BT: 0.86, DT: 0.00
+it: [30/37-36/250], rank: [1/1], Loss: 0.8132, Loss avg: 0.8252, lr: 0.095246, BT: 0.87, DT: 0.00
+Train [36/250]	rank: [1/1], Loss: 0.8252, Acc: 0.9890, Bal Acc: 0.9740, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [36/250]	Acc: 0.9812, Bal Acc: 0.9715
+it: [10/37-37/250], rank: [1/1], Loss: 0.8142, Loss avg: 0.8214, lr: 0.094975, BT: 0.86, DT: 0.00
+it: [20/37-37/250], rank: [1/1], Loss: 0.8065, Loss avg: 0.8275, lr: 0.094975, BT: 0.87, DT: 0.00
+it: [30/37-37/250], rank: [1/1], Loss: 0.8079, Loss avg: 0.8255, lr: 0.094975, BT: 0.87, DT: 0.00
+Train [37/250]	rank: [1/1], Loss: 0.8244, Acc: 0.9869, Bal Acc: 0.9663, BT: 0.89, DT: 0.03,  epoch time: 32.96
+Test [37/250]	Acc: 0.9656, Bal Acc: 0.9370
+it: [10/37-38/250], rank: [1/1], Loss: 0.8204, Loss avg: 0.8312, lr: 0.094697, BT: 0.87, DT: 0.00
+it: [20/37-38/250], rank: [1/1], Loss: 0.8265, Loss avg: 0.8271, lr: 0.094697, BT: 0.86, DT: 0.00
+it: [30/37-38/250], rank: [1/1], Loss: 0.8172, Loss avg: 0.8262, lr: 0.094697, BT: 0.86, DT: 0.00
+Train [38/250]	rank: [1/1], Loss: 0.8261, Acc: 0.9882, Bal Acc: 0.9743, BT: 0.88, DT: 0.02,  epoch time: 32.56
+Test [38/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-39/250], rank: [1/1], Loss: 0.8160, Loss avg: 0.8148, lr: 0.094412, BT: 0.86, DT: 0.00
+it: [20/37-39/250], rank: [1/1], Loss: 0.8074, Loss avg: 0.8165, lr: 0.094412, BT: 0.86, DT: 0.00
+it: [30/37-39/250], rank: [1/1], Loss: 0.8249, Loss avg: 0.8208, lr: 0.094412, BT: 0.86, DT: 0.00
+Train [39/250]	rank: [1/1], Loss: 0.8230, Acc: 0.9869, Bal Acc: 0.9659, BT: 0.88, DT: 0.01,  epoch time: 32.47
+Test [39/250]	Acc: 0.9656, Bal Acc: 0.9528
+it: [10/37-40/250], rank: [1/1], Loss: 0.8310, Loss avg: 0.8221, lr: 0.094120, BT: 0.86, DT: 0.02
+it: [20/37-40/250], rank: [1/1], Loss: 0.8065, Loss avg: 0.8209, lr: 0.094120, BT: 0.86, DT: 0.00
+it: [30/37-40/250], rank: [1/1], Loss: 0.8237, Loss avg: 0.8193, lr: 0.094120, BT: 0.87, DT: 0.00
+Train [40/250]	rank: [1/1], Loss: 0.8197, Acc: 0.9899, Bal Acc: 0.9732, BT: 0.88, DT: 0.02,  epoch time: 32.71
+Test [40/250]	Acc: 0.9812, Bal Acc: 0.9692
+it: [10/37-41/250], rank: [1/1], Loss: 0.8054, Loss avg: 0.8150, lr: 0.093822, BT: 0.87, DT: 0.01
+it: [20/37-41/250], rank: [1/1], Loss: 0.8562, Loss avg: 0.8180, lr: 0.093822, BT: 0.87, DT: 0.00
+it: [30/37-41/250], rank: [1/1], Loss: 0.8178, Loss avg: 0.8208, lr: 0.093822, BT: 0.86, DT: 0.00
+Train [41/250]	rank: [1/1], Loss: 0.8210, Acc: 0.9873, Bal Acc: 0.9713, BT: 0.88, DT: 0.02,  epoch time: 32.70
+Test [41/250]	Acc: 0.9688, Bal Acc: 0.9451
+it: [10/37-42/250], rank: [1/1], Loss: 0.8118, Loss avg: 0.8223, lr: 0.093516, BT: 0.86, DT: 0.00
+it: [20/37-42/250], rank: [1/1], Loss: 0.8160, Loss avg: 0.8177, lr: 0.093516, BT: 0.86, DT: 0.00
+it: [30/37-42/250], rank: [1/1], Loss: 0.8350, Loss avg: 0.8189, lr: 0.093516, BT: 0.87, DT: 0.00
+Train [42/250]	rank: [1/1], Loss: 0.8184, Acc: 0.9903, Bal Acc: 0.9728, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [42/250]	Acc: 0.9719, Bal Acc: 0.9641
+it: [10/37-43/250], rank: [1/1], Loss: 0.8214, Loss avg: 0.8206, lr: 0.093203, BT: 0.86, DT: 0.00
+it: [20/37-43/250], rank: [1/1], Loss: 0.8236, Loss avg: 0.8192, lr: 0.093203, BT: 0.87, DT: 0.00
+it: [30/37-43/250], rank: [1/1], Loss: 0.8305, Loss avg: 0.8193, lr: 0.093203, BT: 0.87, DT: 0.00
+Train [43/250]	rank: [1/1], Loss: 0.8195, Acc: 0.9886, Bal Acc: 0.9675, BT: 0.89, DT: 0.03,  epoch time: 33.15
+Test [43/250]	Acc: 0.9719, Bal Acc: 0.9493
+it: [10/37-44/250], rank: [1/1], Loss: 0.8074, Loss avg: 0.8153, lr: 0.092883, BT: 0.86, DT: 0.00
+it: [20/37-44/250], rank: [1/1], Loss: 0.8042, Loss avg: 0.8159, lr: 0.092883, BT: 0.86, DT: 0.00
+it: [30/37-44/250], rank: [1/1], Loss: 0.8005, Loss avg: 0.8176, lr: 0.092883, BT: 0.86, DT: 0.00
+Train [44/250]	rank: [1/1], Loss: 0.8190, Acc: 0.9899, Bal Acc: 0.9769, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [44/250]	Acc: 0.9750, Bal Acc: 0.9595
+it: [10/37-45/250], rank: [1/1], Loss: 0.8106, Loss avg: 0.8256, lr: 0.092557, BT: 0.86, DT: 0.00
+it: [20/37-45/250], rank: [1/1], Loss: 0.8193, Loss avg: 0.8233, lr: 0.092557, BT: 0.86, DT: 0.00
+it: [30/37-45/250], rank: [1/1], Loss: 0.8218, Loss avg: 0.8222, lr: 0.092557, BT: 0.87, DT: 0.00
+Train [45/250]	rank: [1/1], Loss: 0.8224, Acc: 0.9894, Bal Acc: 0.9711, BT: 0.88, DT: 0.01,  epoch time: 32.46
+Test [45/250]	Acc: 0.9750, Bal Acc: 0.9562
+it: [10/37-46/250], rank: [1/1], Loss: 0.8118, Loss avg: 0.8200, lr: 0.092224, BT: 0.87, DT: 0.00
+it: [20/37-46/250], rank: [1/1], Loss: 0.8071, Loss avg: 0.8170, lr: 0.092224, BT: 0.87, DT: 0.00
+it: [30/37-46/250], rank: [1/1], Loss: 0.8550, Loss avg: 0.8164, lr: 0.092224, BT: 0.86, DT: 0.00
+Train [46/250]	rank: [1/1], Loss: 0.8172, Acc: 0.9907, Bal Acc: 0.9740, BT: 0.88, DT: 0.01,  epoch time: 32.50
+Test [46/250]	Acc: 0.9781, Bal Acc: 0.9582
+it: [10/37-47/250], rank: [1/1], Loss: 0.8202, Loss avg: 0.8158, lr: 0.091885, BT: 0.86, DT: 0.00
+it: [20/37-47/250], rank: [1/1], Loss: 0.8153, Loss avg: 0.8174, lr: 0.091885, BT: 0.86, DT: 0.00
+it: [30/37-47/250], rank: [1/1], Loss: 0.8133, Loss avg: 0.8182, lr: 0.091885, BT: 0.86, DT: 0.00
+Train [47/250]	rank: [1/1], Loss: 0.8198, Acc: 0.9916, Bal Acc: 0.9782, BT: 0.88, DT: 0.01,  epoch time: 32.50
+Test [47/250]	Acc: 0.9781, Bal Acc: 0.9615
+it: [10/37-48/250], rank: [1/1], Loss: 0.8607, Loss avg: 0.8212, lr: 0.091538, BT: 0.86, DT: 0.00
+it: [20/37-48/250], rank: [1/1], Loss: 0.8003, Loss avg: 0.8178, lr: 0.091538, BT: 0.87, DT: 0.00
+it: [30/37-48/250], rank: [1/1], Loss: 0.8079, Loss avg: 0.8189, lr: 0.091538, BT: 0.86, DT: 0.00
+Train [48/250]	rank: [1/1], Loss: 0.8189, Acc: 0.9890, Bal Acc: 0.9801, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [48/250]	Acc: 0.9781, Bal Acc: 0.9694
+it: [10/37-49/250], rank: [1/1], Loss: 0.8037, Loss avg: 0.8227, lr: 0.091185, BT: 0.86, DT: 0.00
+it: [20/37-49/250], rank: [1/1], Loss: 0.8085, Loss avg: 0.8215, lr: 0.091185, BT: 0.87, DT: 0.00
+it: [30/37-49/250], rank: [1/1], Loss: 0.8081, Loss avg: 0.8188, lr: 0.091185, BT: 0.86, DT: 0.00
+Train [49/250]	rank: [1/1], Loss: 0.8204, Acc: 0.9882, Bal Acc: 0.9771, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [49/250]	Acc: 0.9750, Bal Acc: 0.9515
+it: [10/37-50/250], rank: [1/1], Loss: 0.8427, Loss avg: 0.8315, lr: 0.090826, BT: 0.86, DT: 0.00
+it: [20/37-50/250], rank: [1/1], Loss: 0.8174, Loss avg: 0.8257, lr: 0.090826, BT: 0.87, DT: 0.01
+it: [30/37-50/250], rank: [1/1], Loss: 0.8214, Loss avg: 0.8216, lr: 0.090826, BT: 0.86, DT: 0.00
+Train [50/250]	rank: [1/1], Loss: 0.8204, Acc: 0.9890, Bal Acc: 0.9743, BT: 0.88, DT: 0.02,  epoch time: 32.54
+Test [50/250]	Acc: 0.9812, Bal Acc: 0.9620
+it: [10/37-51/250], rank: [1/1], Loss: 0.8041, Loss avg: 0.8199, lr: 0.090460, BT: 0.86, DT: 0.00
+it: [20/37-51/250], rank: [1/1], Loss: 0.8661, Loss avg: 0.8210, lr: 0.090460, BT: 0.86, DT: 0.00
+it: [30/37-51/250], rank: [1/1], Loss: 0.8258, Loss avg: 0.8193, lr: 0.090460, BT: 0.87, DT: 0.00
+Train [51/250]	rank: [1/1], Loss: 0.8175, Acc: 0.9886, Bal Acc: 0.9674, BT: 0.88, DT: 0.02,  epoch time: 32.46
+Test [51/250]	Acc: 0.9750, Bal Acc: 0.9579
+it: [10/37-52/250], rank: [1/1], Loss: 0.8209, Loss avg: 0.8262, lr: 0.090088, BT: 0.87, DT: 0.00
+it: [20/37-52/250], rank: [1/1], Loss: 0.8128, Loss avg: 0.8228, lr: 0.090088, BT: 0.86, DT: 0.00
+it: [30/37-52/250], rank: [1/1], Loss: 0.8344, Loss avg: 0.8205, lr: 0.090088, BT: 0.86, DT: 0.00
+Train [52/250]	rank: [1/1], Loss: 0.8197, Acc: 0.9890, Bal Acc: 0.9743, BT: 0.87, DT: 0.01,  epoch time: 32.43
+Test [52/250]	Acc: 0.9688, Bal Acc: 0.9521
+it: [10/37-53/250], rank: [1/1], Loss: 0.8019, Loss avg: 0.8122, lr: 0.089710, BT: 0.87, DT: 0.00
+it: [20/37-53/250], rank: [1/1], Loss: 0.8060, Loss avg: 0.8184, lr: 0.089710, BT: 0.86, DT: 0.00
+it: [30/37-53/250], rank: [1/1], Loss: 0.8014, Loss avg: 0.8160, lr: 0.089710, BT: 0.87, DT: 0.00
+Train [53/250]	rank: [1/1], Loss: 0.8163, Acc: 0.9899, Bal Acc: 0.9770, BT: 0.88, DT: 0.01,  epoch time: 32.47
+Test [53/250]	Acc: 0.9812, Bal Acc: 0.9706
+it: [10/37-54/250], rank: [1/1], Loss: 0.8538, Loss avg: 0.8238, lr: 0.089325, BT: 0.87, DT: 0.00
+it: [20/37-54/250], rank: [1/1], Loss: 0.8254, Loss avg: 0.8244, lr: 0.089325, BT: 0.86, DT: 0.00
+it: [30/37-54/250], rank: [1/1], Loss: 0.8162, Loss avg: 0.8233, lr: 0.089325, BT: 0.86, DT: 0.00
+Train [54/250]	rank: [1/1], Loss: 0.8197, Acc: 0.9882, Bal Acc: 0.9753, BT: 0.89, DT: 0.02,  epoch time: 32.83
+Test [54/250]	Acc: 0.9781, Bal Acc: 0.9693
+it: [10/37-55/250], rank: [1/1], Loss: 0.8098, Loss avg: 0.8161, lr: 0.088934, BT: 0.87, DT: 0.00
+it: [20/37-55/250], rank: [1/1], Loss: 0.8130, Loss avg: 0.8166, lr: 0.088934, BT: 0.86, DT: 0.00
+it: [30/37-55/250], rank: [1/1], Loss: 0.8233, Loss avg: 0.8189, lr: 0.088934, BT: 0.86, DT: 0.00
+Train [55/250]	rank: [1/1], Loss: 0.8190, Acc: 0.9886, Bal Acc: 0.9738, BT: 0.89, DT: 0.03,  epoch time: 32.95
+Test [55/250]	Acc: 0.9781, Bal Acc: 0.9694
+it: [10/37-56/250], rank: [1/1], Loss: 0.8169, Loss avg: 0.8192, lr: 0.088537, BT: 0.87, DT: 0.00
+it: [20/37-56/250], rank: [1/1], Loss: 0.8496, Loss avg: 0.8209, lr: 0.088537, BT: 0.87, DT: 0.01
+it: [30/37-56/250], rank: [1/1], Loss: 0.8424, Loss avg: 0.8192, lr: 0.088537, BT: 0.86, DT: 0.00
+Train [56/250]	rank: [1/1], Loss: 0.8172, Acc: 0.9916, Bal Acc: 0.9789, BT: 0.88, DT: 0.01,  epoch time: 32.53
+Test [56/250]	Acc: 0.9750, Bal Acc: 0.9573
+it: [10/37-57/250], rank: [1/1], Loss: 0.8024, Loss avg: 0.8116, lr: 0.088134, BT: 0.86, DT: 0.00
+it: [20/37-57/250], rank: [1/1], Loss: 0.8333, Loss avg: 0.8114, lr: 0.088134, BT: 0.87, DT: 0.00
+it: [30/37-57/250], rank: [1/1], Loss: 0.8455, Loss avg: 0.8113, lr: 0.088134, BT: 0.86, DT: 0.00
+Train [57/250]	rank: [1/1], Loss: 0.8109, Acc: 0.9928, Bal Acc: 0.9804, BT: 0.87, DT: 0.01,  epoch time: 32.43
+Test [57/250]	Acc: 0.9750, Bal Acc: 0.9516
+it: [10/37-58/250], rank: [1/1], Loss: 0.8078, Loss avg: 0.8138, lr: 0.087725, BT: 0.86, DT: 0.01
+it: [20/37-58/250], rank: [1/1], Loss: 0.8467, Loss avg: 0.8152, lr: 0.087725, BT: 0.87, DT: 0.00
+it: [30/37-58/250], rank: [1/1], Loss: 0.8011, Loss avg: 0.8156, lr: 0.087725, BT: 0.86, DT: 0.00
+Train [58/250]	rank: [1/1], Loss: 0.8146, Acc: 0.9890, Bal Acc: 0.9704, BT: 0.88, DT: 0.02,  epoch time: 32.61
+Test [58/250]	Acc: 0.9781, Bal Acc: 0.9615
+it: [10/37-59/250], rank: [1/1], Loss: 0.8234, Loss avg: 0.8103, lr: 0.087310, BT: 0.87, DT: 0.00
+it: [20/37-59/250], rank: [1/1], Loss: 0.8107, Loss avg: 0.8179, lr: 0.087310, BT: 0.87, DT: 0.00
+it: [30/37-59/250], rank: [1/1], Loss: 0.8246, Loss avg: 0.8161, lr: 0.087310, BT: 0.86, DT: 0.00
+Train [59/250]	rank: [1/1], Loss: 0.8147, Acc: 0.9907, Bal Acc: 0.9764, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [59/250]	Acc: 0.9688, Bal Acc: 0.9498
+it: [10/37-60/250], rank: [1/1], Loss: 0.8067, Loss avg: 0.8085, lr: 0.086889, BT: 0.87, DT: 0.00
+it: [20/37-60/250], rank: [1/1], Loss: 0.8037, Loss avg: 0.8113, lr: 0.086889, BT: 0.86, DT: 0.00
+it: [30/37-60/250], rank: [1/1], Loss: 0.8199, Loss avg: 0.8155, lr: 0.086889, BT: 0.87, DT: 0.00
+Train [60/250]	rank: [1/1], Loss: 0.8160, Acc: 0.9907, Bal Acc: 0.9795, BT: 0.88, DT: 0.02,  epoch time: 32.70
+Test [60/250]	Acc: 0.9719, Bal Acc: 0.9491
+it: [10/37-61/250], rank: [1/1], Loss: 0.8329, Loss avg: 0.8111, lr: 0.086462, BT: 0.87, DT: 0.00
+it: [20/37-61/250], rank: [1/1], Loss: 0.7971, Loss avg: 0.8084, lr: 0.086462, BT: 0.87, DT: 0.00
+it: [30/37-61/250], rank: [1/1], Loss: 0.8166, Loss avg: 0.8101, lr: 0.086462, BT: 0.86, DT: 0.00
+Train [61/250]	rank: [1/1], Loss: 0.8096, Acc: 0.9945, Bal Acc: 0.9837, BT: 0.89, DT: 0.02,  epoch time: 32.85
+Test [61/250]	Acc: 0.9781, Bal Acc: 0.9615
+it: [10/37-62/250], rank: [1/1], Loss: 0.8193, Loss avg: 0.8071, lr: 0.086029, BT: 0.86, DT: 0.00
+it: [20/37-62/250], rank: [1/1], Loss: 0.8062, Loss avg: 0.8101, lr: 0.086029, BT: 0.87, DT: 0.01
+it: [30/37-62/250], rank: [1/1], Loss: 0.8044, Loss avg: 0.8110, lr: 0.086029, BT: 0.86, DT: 0.00
+Train [62/250]	rank: [1/1], Loss: 0.8132, Acc: 0.9890, Bal Acc: 0.9751, BT: 0.88, DT: 0.02,  epoch time: 32.52
+Test [62/250]	Acc: 0.9688, Bal Acc: 0.9625
+it: [10/37-63/250], rank: [1/1], Loss: 0.8003, Loss avg: 0.8082, lr: 0.085591, BT: 0.86, DT: 0.00
+it: [20/37-63/250], rank: [1/1], Loss: 0.8108, Loss avg: 0.8134, lr: 0.085591, BT: 0.86, DT: 0.00
+it: [30/37-63/250], rank: [1/1], Loss: 0.8037, Loss avg: 0.8124, lr: 0.085591, BT: 0.86, DT: 0.00
+Train [63/250]	rank: [1/1], Loss: 0.8136, Acc: 0.9911, Bal Acc: 0.9814, BT: 0.88, DT: 0.02,  epoch time: 32.69
+Test [63/250]	Acc: 0.9719, Bal Acc: 0.9472
+it: [10/37-64/250], rank: [1/1], Loss: 0.7945, Loss avg: 0.8084, lr: 0.085147, BT: 0.87, DT: 0.01
+it: [20/37-64/250], rank: [1/1], Loss: 0.8170, Loss avg: 0.8149, lr: 0.085147, BT: 0.86, DT: 0.00
+it: [30/37-64/250], rank: [1/1], Loss: 0.8034, Loss avg: 0.8149, lr: 0.085147, BT: 0.87, DT: 0.00
+Train [64/250]	rank: [1/1], Loss: 0.8140, Acc: 0.9924, Bal Acc: 0.9767, BT: 0.88, DT: 0.02,  epoch time: 32.72
+Test [64/250]	Acc: 0.9656, Bal Acc: 0.9148
+it: [10/37-65/250], rank: [1/1], Loss: 0.8076, Loss avg: 0.8097, lr: 0.084698, BT: 0.87, DT: 0.01
+it: [20/37-65/250], rank: [1/1], Loss: 0.8330, Loss avg: 0.8156, lr: 0.084698, BT: 0.87, DT: 0.00
+it: [30/37-65/250], rank: [1/1], Loss: 0.8158, Loss avg: 0.8174, lr: 0.084698, BT: 0.87, DT: 0.00
+Train [65/250]	rank: [1/1], Loss: 0.8152, Acc: 0.9899, Bal Acc: 0.9759, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [65/250]	Acc: 0.9781, Bal Acc: 0.9671
+it: [10/37-66/250], rank: [1/1], Loss: 0.8154, Loss avg: 0.8126, lr: 0.084243, BT: 0.87, DT: 0.00
+it: [20/37-66/250], rank: [1/1], Loss: 0.8901, Loss avg: 0.8169, lr: 0.084243, BT: 0.87, DT: 0.00
+it: [30/37-66/250], rank: [1/1], Loss: 0.8143, Loss avg: 0.8154, lr: 0.084243, BT: 0.86, DT: 0.00
+Train [66/250]	rank: [1/1], Loss: 0.8142, Acc: 0.9916, Bal Acc: 0.9820, BT: 0.88, DT: 0.02,  epoch time: 32.61
+Test [66/250]	Acc: 0.9750, Bal Acc: 0.9516
+it: [10/37-67/250], rank: [1/1], Loss: 0.7908, Loss avg: 0.8089, lr: 0.083783, BT: 0.86, DT: 0.00
+it: [20/37-67/250], rank: [1/1], Loss: 0.8041, Loss avg: 0.8100, lr: 0.083783, BT: 0.86, DT: 0.00
+it: [30/37-67/250], rank: [1/1], Loss: 0.8156, Loss avg: 0.8117, lr: 0.083783, BT: 0.87, DT: 0.00
+Train [67/250]	rank: [1/1], Loss: 0.8105, Acc: 0.9937, Bal Acc: 0.9821, BT: 0.89, DT: 0.03,  epoch time: 32.97
+Test [67/250]	Acc: 0.9750, Bal Acc: 0.9445
+it: [10/37-68/250], rank: [1/1], Loss: 0.8041, Loss avg: 0.8096, lr: 0.083317, BT: 0.86, DT: 0.00
+it: [20/37-68/250], rank: [1/1], Loss: 0.7979, Loss avg: 0.8100, lr: 0.083317, BT: 0.86, DT: 0.00
+it: [30/37-68/250], rank: [1/1], Loss: 0.8069, Loss avg: 0.8105, lr: 0.083317, BT: 0.87, DT: 0.00
+Train [68/250]	rank: [1/1], Loss: 0.8115, Acc: 0.9941, Bal Acc: 0.9833, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [68/250]	Acc: 0.9750, Bal Acc: 0.9661
+it: [10/37-69/250], rank: [1/1], Loss: 0.7987, Loss avg: 0.8088, lr: 0.082846, BT: 0.86, DT: 0.00
+it: [20/37-69/250], rank: [1/1], Loss: 0.8190, Loss avg: 0.8089, lr: 0.082846, BT: 0.87, DT: 0.01
+it: [30/37-69/250], rank: [1/1], Loss: 0.8163, Loss avg: 0.8086, lr: 0.082846, BT: 0.86, DT: 0.00
+Train [69/250]	rank: [1/1], Loss: 0.8080, Acc: 0.9945, Bal Acc: 0.9836, BT: 0.88, DT: 0.02,  epoch time: 32.46
+Test [69/250]	Acc: 0.9750, Bal Acc: 0.9578
+it: [10/37-70/250], rank: [1/1], Loss: 0.8129, Loss avg: 0.8093, lr: 0.082370, BT: 0.86, DT: 0.00
+it: [20/37-70/250], rank: [1/1], Loss: 0.8027, Loss avg: 0.8071, lr: 0.082370, BT: 0.87, DT: 0.00
+it: [30/37-70/250], rank: [1/1], Loss: 0.7995, Loss avg: 0.8090, lr: 0.082370, BT: 0.87, DT: 0.00
+Train [70/250]	rank: [1/1], Loss: 0.8085, Acc: 0.9949, Bal Acc: 0.9887, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [70/250]	Acc: 0.9781, Bal Acc: 0.9466
+it: [10/37-71/250], rank: [1/1], Loss: 0.8001, Loss avg: 0.8012, lr: 0.081889, BT: 0.86, DT: 0.00
+it: [20/37-71/250], rank: [1/1], Loss: 0.7974, Loss avg: 0.8054, lr: 0.081889, BT: 0.87, DT: 0.00
+it: [30/37-71/250], rank: [1/1], Loss: 0.8015, Loss avg: 0.8094, lr: 0.081889, BT: 0.86, DT: 0.00
+Train [71/250]	rank: [1/1], Loss: 0.8096, Acc: 0.9941, Bal Acc: 0.9807, BT: 0.88, DT: 0.02,  epoch time: 32.69
+Test [71/250]	Acc: 0.9812, Bal Acc: 0.9680
+it: [10/37-72/250], rank: [1/1], Loss: 0.8236, Loss avg: 0.8112, lr: 0.081403, BT: 0.86, DT: 0.00
+it: [20/37-72/250], rank: [1/1], Loss: 0.8112, Loss avg: 0.8098, lr: 0.081403, BT: 0.87, DT: 0.00
+it: [30/37-72/250], rank: [1/1], Loss: 0.8234, Loss avg: 0.8098, lr: 0.081403, BT: 0.86, DT: 0.00
+Train [72/250]	rank: [1/1], Loss: 0.8108, Acc: 0.9928, Bal Acc: 0.9794, BT: 0.87, DT: 0.01,  epoch time: 32.41
+Test [72/250]	Acc: 0.9781, Bal Acc: 0.9615
+it: [10/37-73/250], rank: [1/1], Loss: 0.8072, Loss avg: 0.8056, lr: 0.080912, BT: 0.86, DT: 0.00
+it: [20/37-73/250], rank: [1/1], Loss: 0.8160, Loss avg: 0.8092, lr: 0.080912, BT: 0.86, DT: 0.00
+it: [30/37-73/250], rank: [1/1], Loss: 0.8053, Loss avg: 0.8112, lr: 0.080912, BT: 0.87, DT: 0.00
+Train [73/250]	rank: [1/1], Loss: 0.8101, Acc: 0.9924, Bal Acc: 0.9811, BT: 0.89, DT: 0.03,  epoch time: 32.92
+Test [73/250]	Acc: 0.9781, Bal Acc: 0.9684
+it: [10/37-74/250], rank: [1/1], Loss: 0.8056, Loss avg: 0.8099, lr: 0.080416, BT: 0.87, DT: 0.00
+it: [20/37-74/250], rank: [1/1], Loss: 0.8138, Loss avg: 0.8079, lr: 0.080416, BT: 0.87, DT: 0.00
+it: [30/37-74/250], rank: [1/1], Loss: 0.8378, Loss avg: 0.8114, lr: 0.080416, BT: 0.86, DT: 0.00
+Train [74/250]	rank: [1/1], Loss: 0.8104, Acc: 0.9928, Bal Acc: 0.9803, BT: 0.88, DT: 0.02,  epoch time: 32.59
+Test [74/250]	Acc: 0.9844, Bal Acc: 0.9737
+it: [10/37-75/250], rank: [1/1], Loss: 0.7997, Loss avg: 0.8074, lr: 0.079915, BT: 0.87, DT: 0.00
+it: [20/37-75/250], rank: [1/1], Loss: 0.8050, Loss avg: 0.8088, lr: 0.079915, BT: 0.86, DT: 0.00
+it: [30/37-75/250], rank: [1/1], Loss: 0.8024, Loss avg: 0.8111, lr: 0.079915, BT: 0.86, DT: 0.00
+Train [75/250]	rank: [1/1], Loss: 0.8102, Acc: 0.9928, Bal Acc: 0.9812, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [75/250]	Acc: 0.9750, Bal Acc: 0.9650
+it: [10/37-76/250], rank: [1/1], Loss: 0.8286, Loss avg: 0.8139, lr: 0.079410, BT: 0.86, DT: 0.00
+it: [20/37-76/250], rank: [1/1], Loss: 0.8001, Loss avg: 0.8131, lr: 0.079410, BT: 0.86, DT: 0.00
+it: [30/37-76/250], rank: [1/1], Loss: 0.8122, Loss avg: 0.8118, lr: 0.079410, BT: 0.87, DT: 0.00
+Train [76/250]	rank: [1/1], Loss: 0.8113, Acc: 0.9903, Bal Acc: 0.9752, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [76/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-77/250], rank: [1/1], Loss: 0.8434, Loss avg: 0.8100, lr: 0.078900, BT: 0.87, DT: 0.01
+it: [20/37-77/250], rank: [1/1], Loss: 0.8101, Loss avg: 0.8071, lr: 0.078900, BT: 0.86, DT: 0.00
+it: [30/37-77/250], rank: [1/1], Loss: 0.8078, Loss avg: 0.8057, lr: 0.078900, BT: 0.87, DT: 0.00
+Train [77/250]	rank: [1/1], Loss: 0.8065, Acc: 0.9945, Bal Acc: 0.9893, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [77/250]	Acc: 0.9750, Bal Acc: 0.9592
+it: [10/37-78/250], rank: [1/1], Loss: 0.8118, Loss avg: 0.8016, lr: 0.078385, BT: 0.87, DT: 0.00
+it: [20/37-78/250], rank: [1/1], Loss: 0.8062, Loss avg: 0.8047, lr: 0.078385, BT: 0.86, DT: 0.00
+it: [30/37-78/250], rank: [1/1], Loss: 0.7979, Loss avg: 0.8060, lr: 0.078385, BT: 0.87, DT: 0.00
+Train [78/250]	rank: [1/1], Loss: 0.8075, Acc: 0.9937, Bal Acc: 0.9849, BT: 0.88, DT: 0.02,  epoch time: 32.72
+Test [78/250]	Acc: 0.9688, Bal Acc: 0.9363
+it: [10/37-79/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.8124, lr: 0.077866, BT: 0.86, DT: 0.00
+it: [20/37-79/250], rank: [1/1], Loss: 0.8019, Loss avg: 0.8094, lr: 0.077866, BT: 0.87, DT: 0.00
+it: [30/37-79/250], rank: [1/1], Loss: 0.8177, Loss avg: 0.8064, lr: 0.077866, BT: 0.86, DT: 0.00
+Train [79/250]	rank: [1/1], Loss: 0.8056, Acc: 0.9941, Bal Acc: 0.9849, BT: 0.89, DT: 0.03,  epoch time: 32.97
+Test [79/250]	Acc: 0.9750, Bal Acc: 0.9577
+it: [10/37-80/250], rank: [1/1], Loss: 0.8221, Loss avg: 0.8088, lr: 0.077342, BT: 0.87, DT: 0.00
+it: [20/37-80/250], rank: [1/1], Loss: 0.8062, Loss avg: 0.8085, lr: 0.077342, BT: 0.86, DT: 0.00
+it: [30/37-80/250], rank: [1/1], Loss: 0.7944, Loss avg: 0.8082, lr: 0.077342, BT: 0.86, DT: 0.00
+Train [80/250]	rank: [1/1], Loss: 0.8100, Acc: 0.9924, Bal Acc: 0.9844, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [80/250]	Acc: 0.9812, Bal Acc: 0.9715
+it: [10/37-81/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.8108, lr: 0.076815, BT: 0.87, DT: 0.00
+it: [20/37-81/250], rank: [1/1], Loss: 0.8246, Loss avg: 0.8151, lr: 0.076815, BT: 0.87, DT: 0.00
+it: [30/37-81/250], rank: [1/1], Loss: 0.7980, Loss avg: 0.8139, lr: 0.076815, BT: 0.86, DT: 0.00
+Train [81/250]	rank: [1/1], Loss: 0.8120, Acc: 0.9911, Bal Acc: 0.9805, BT: 0.88, DT: 0.01,  epoch time: 32.51
+Test [81/250]	Acc: 0.9750, Bal Acc: 0.9560
+it: [10/37-82/250], rank: [1/1], Loss: 0.8079, Loss avg: 0.8048, lr: 0.076282, BT: 0.87, DT: 0.00
+it: [20/37-82/250], rank: [1/1], Loss: 0.8033, Loss avg: 0.8060, lr: 0.076282, BT: 0.86, DT: 0.00
+it: [30/37-82/250], rank: [1/1], Loss: 0.8059, Loss avg: 0.8072, lr: 0.076282, BT: 0.86, DT: 0.00
+Train [82/250]	rank: [1/1], Loss: 0.8071, Acc: 0.9954, Bal Acc: 0.9885, BT: 0.88, DT: 0.02,  epoch time: 32.54
+Test [82/250]	Acc: 0.9812, Bal Acc: 0.9680
+it: [10/37-83/250], rank: [1/1], Loss: 0.8178, Loss avg: 0.8092, lr: 0.075746, BT: 0.86, DT: 0.00
+it: [20/37-83/250], rank: [1/1], Loss: 0.8038, Loss avg: 0.8094, lr: 0.075746, BT: 0.86, DT: 0.00
+it: [30/37-83/250], rank: [1/1], Loss: 0.7957, Loss avg: 0.8088, lr: 0.075746, BT: 0.87, DT: 0.00
+Train [83/250]	rank: [1/1], Loss: 0.8091, Acc: 0.9937, Bal Acc: 0.9807, BT: 0.87, DT: 0.01,  epoch time: 32.43
+Test [83/250]	Acc: 0.9812, Bal Acc: 0.9788
+it: [10/37-84/250], rank: [1/1], Loss: 0.8117, Loss avg: 0.8044, lr: 0.075206, BT: 0.86, DT: 0.00
+it: [20/37-84/250], rank: [1/1], Loss: 0.7897, Loss avg: 0.8030, lr: 0.075206, BT: 0.86, DT: 0.00
+it: [30/37-84/250], rank: [1/1], Loss: 0.7965, Loss avg: 0.8047, lr: 0.075206, BT: 0.87, DT: 0.00
+Train [84/250]	rank: [1/1], Loss: 0.8044, Acc: 0.9966, Bal Acc: 0.9906, BT: 0.88, DT: 0.02,  epoch time: 32.54
+Test [84/250]	Acc: 0.9844, Bal Acc: 0.9701
+it: [10/37-85/250], rank: [1/1], Loss: 0.8036, Loss avg: 0.8031, lr: 0.074662, BT: 0.87, DT: 0.00
+it: [20/37-85/250], rank: [1/1], Loss: 0.8046, Loss avg: 0.8035, lr: 0.074662, BT: 0.87, DT: 0.00
+it: [30/37-85/250], rank: [1/1], Loss: 0.7935, Loss avg: 0.8058, lr: 0.074662, BT: 0.87, DT: 0.00
+Train [85/250]	rank: [1/1], Loss: 0.8076, Acc: 0.9941, Bal Acc: 0.9877, BT: 0.89, DT: 0.03,  epoch time: 33.06
+Test [85/250]	Acc: 0.9625, Bal Acc: 0.9496
+it: [10/37-86/250], rank: [1/1], Loss: 0.8017, Loss avg: 0.8064, lr: 0.074114, BT: 0.87, DT: 0.00
+it: [20/37-86/250], rank: [1/1], Loss: 0.7964, Loss avg: 0.8071, lr: 0.074114, BT: 0.87, DT: 0.00
+it: [30/37-86/250], rank: [1/1], Loss: 0.8004, Loss avg: 0.8057, lr: 0.074114, BT: 0.86, DT: 0.00
+Train [86/250]	rank: [1/1], Loss: 0.8065, Acc: 0.9932, Bal Acc: 0.9814, BT: 0.88, DT: 0.02,  epoch time: 32.65
+Test [86/250]	Acc: 0.9812, Bal Acc: 0.9637
+it: [10/37-87/250], rank: [1/1], Loss: 0.7937, Loss avg: 0.8121, lr: 0.073562, BT: 0.86, DT: 0.00
+it: [20/37-87/250], rank: [1/1], Loss: 0.7980, Loss avg: 0.8088, lr: 0.073562, BT: 0.86, DT: 0.00
+it: [30/37-87/250], rank: [1/1], Loss: 0.8039, Loss avg: 0.8088, lr: 0.073562, BT: 0.86, DT: 0.00
+Train [87/250]	rank: [1/1], Loss: 0.8075, Acc: 0.9941, Bal Acc: 0.9835, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [87/250]	Acc: 0.9781, Bal Acc: 0.9577
+it: [10/37-88/250], rank: [1/1], Loss: 0.8178, Loss avg: 0.8082, lr: 0.073006, BT: 0.86, DT: 0.00
+it: [20/37-88/250], rank: [1/1], Loss: 0.8016, Loss avg: 0.8055, lr: 0.073006, BT: 0.86, DT: 0.00
+it: [30/37-88/250], rank: [1/1], Loss: 0.7973, Loss avg: 0.8060, lr: 0.073006, BT: 0.87, DT: 0.00
+Train [88/250]	rank: [1/1], Loss: 0.8071, Acc: 0.9945, Bal Acc: 0.9848, BT: 0.88, DT: 0.02,  epoch time: 32.70
+Test [88/250]	Acc: 0.9844, Bal Acc: 0.9726
+it: [10/37-89/250], rank: [1/1], Loss: 0.8303, Loss avg: 0.8136, lr: 0.072447, BT: 0.87, DT: 0.00
+it: [20/37-89/250], rank: [1/1], Loss: 0.8045, Loss avg: 0.8129, lr: 0.072447, BT: 0.86, DT: 0.00
+it: [30/37-89/250], rank: [1/1], Loss: 0.8000, Loss avg: 0.8100, lr: 0.072447, BT: 0.87, DT: 0.00
+Train [89/250]	rank: [1/1], Loss: 0.8090, Acc: 0.9941, Bal Acc: 0.9864, BT: 0.88, DT: 0.02,  epoch time: 32.70
+Test [89/250]	Acc: 0.9688, Bal Acc: 0.9393
+it: [10/37-90/250], rank: [1/1], Loss: 0.8100, Loss avg: 0.8074, lr: 0.071884, BT: 0.87, DT: 0.00
+it: [20/37-90/250], rank: [1/1], Loss: 0.8002, Loss avg: 0.8052, lr: 0.071884, BT: 0.87, DT: 0.00
+it: [30/37-90/250], rank: [1/1], Loss: 0.8011, Loss avg: 0.8051, lr: 0.071884, BT: 0.86, DT: 0.00
+Train [90/250]	rank: [1/1], Loss: 0.8048, Acc: 0.9954, Bal Acc: 0.9872, BT: 0.88, DT: 0.02,  epoch time: 32.76
+Test [90/250]	Acc: 0.9781, Bal Acc: 0.9582
+it: [10/37-91/250], rank: [1/1], Loss: 0.8029, Loss avg: 0.8101, lr: 0.071318, BT: 0.86, DT: 0.00
+it: [20/37-91/250], rank: [1/1], Loss: 0.8111, Loss avg: 0.8138, lr: 0.071318, BT: 0.87, DT: 0.00
+it: [30/37-91/250], rank: [1/1], Loss: 0.8086, Loss avg: 0.8123, lr: 0.071318, BT: 0.86, DT: 0.00
+Train [91/250]	rank: [1/1], Loss: 0.8118, Acc: 0.9928, Bal Acc: 0.9824, BT: 0.89, DT: 0.02,  epoch time: 32.83
+Test [91/250]	Acc: 0.9781, Bal Acc: 0.9683
+it: [10/37-92/250], rank: [1/1], Loss: 0.8026, Loss avg: 0.8023, lr: 0.070748, BT: 0.86, DT: 0.00
+it: [20/37-92/250], rank: [1/1], Loss: 0.8003, Loss avg: 0.8021, lr: 0.070748, BT: 0.86, DT: 0.00
+it: [30/37-92/250], rank: [1/1], Loss: 0.8044, Loss avg: 0.8027, lr: 0.070748, BT: 0.86, DT: 0.00
+Train [92/250]	rank: [1/1], Loss: 0.8028, Acc: 0.9958, Bal Acc: 0.9903, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [92/250]	Acc: 0.9719, Bal Acc: 0.9389
+it: [10/37-93/250], rank: [1/1], Loss: 0.8169, Loss avg: 0.8058, lr: 0.070175, BT: 0.87, DT: 0.00
+it: [20/37-93/250], rank: [1/1], Loss: 0.8004, Loss avg: 0.8064, lr: 0.070175, BT: 0.87, DT: 0.00
+it: [30/37-93/250], rank: [1/1], Loss: 0.8035, Loss avg: 0.8068, lr: 0.070175, BT: 0.86, DT: 0.00
+Train [93/250]	rank: [1/1], Loss: 0.8074, Acc: 0.9928, Bal Acc: 0.9829, BT: 0.88, DT: 0.02,  epoch time: 32.53
+Test [93/250]	Acc: 0.9781, Bal Acc: 0.9762
+it: [10/37-94/250], rank: [1/1], Loss: 0.7947, Loss avg: 0.8028, lr: 0.069599, BT: 0.86, DT: 0.00
+it: [20/37-94/250], rank: [1/1], Loss: 0.8052, Loss avg: 0.8059, lr: 0.069599, BT: 0.87, DT: 0.00
+it: [30/37-94/250], rank: [1/1], Loss: 0.8088, Loss avg: 0.8060, lr: 0.069599, BT: 0.87, DT: 0.00
+Train [94/250]	rank: [1/1], Loss: 0.8054, Acc: 0.9941, Bal Acc: 0.9844, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [94/250]	Acc: 0.9781, Bal Acc: 0.9614
+it: [10/37-95/250], rank: [1/1], Loss: 0.8072, Loss avg: 0.8077, lr: 0.069020, BT: 0.87, DT: 0.00
+it: [20/37-95/250], rank: [1/1], Loss: 0.8283, Loss avg: 0.8094, lr: 0.069020, BT: 0.87, DT: 0.00
+it: [30/37-95/250], rank: [1/1], Loss: 0.7931, Loss avg: 0.8073, lr: 0.069020, BT: 0.86, DT: 0.00
+Train [95/250]	rank: [1/1], Loss: 0.8074, Acc: 0.9941, Bal Acc: 0.9845, BT: 0.88, DT: 0.02,  epoch time: 32.54
+Test [95/250]	Acc: 0.9781, Bal Acc: 0.9673
+it: [10/37-96/250], rank: [1/1], Loss: 0.8038, Loss avg: 0.8062, lr: 0.068438, BT: 0.86, DT: 0.00
+it: [20/37-96/250], rank: [1/1], Loss: 0.8043, Loss avg: 0.8081, lr: 0.068438, BT: 0.87, DT: 0.00
+it: [30/37-96/250], rank: [1/1], Loss: 0.7975, Loss avg: 0.8078, lr: 0.068438, BT: 0.87, DT: 0.00
+Train [96/250]	rank: [1/1], Loss: 0.8065, Acc: 0.9937, Bal Acc: 0.9849, BT: 0.89, DT: 0.03,  epoch time: 32.93
+Test [96/250]	Acc: 0.9781, Bal Acc: 0.9613
+it: [10/37-97/250], rank: [1/1], Loss: 0.7939, Loss avg: 0.8056, lr: 0.067853, BT: 0.87, DT: 0.00
+it: [20/37-97/250], rank: [1/1], Loss: 0.8028, Loss avg: 0.8043, lr: 0.067853, BT: 0.87, DT: 0.00
+it: [30/37-97/250], rank: [1/1], Loss: 0.8050, Loss avg: 0.8021, lr: 0.067853, BT: 0.87, DT: 0.00
+Train [97/250]	rank: [1/1], Loss: 0.8029, Acc: 0.9958, Bal Acc: 0.9834, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [97/250]	Acc: 0.9781, Bal Acc: 0.9683
+it: [10/37-98/250], rank: [1/1], Loss: 0.8065, Loss avg: 0.8021, lr: 0.067265, BT: 0.86, DT: 0.00
+it: [20/37-98/250], rank: [1/1], Loss: 0.8003, Loss avg: 0.8013, lr: 0.067265, BT: 0.87, DT: 0.01
+it: [30/37-98/250], rank: [1/1], Loss: 0.8002, Loss avg: 0.8016, lr: 0.067265, BT: 0.87, DT: 0.00
+Train [98/250]	rank: [1/1], Loss: 0.8019, Acc: 0.9962, Bal Acc: 0.9885, BT: 0.88, DT: 0.02,  epoch time: 32.53
+Test [98/250]	Acc: 0.9812, Bal Acc: 0.9704
+it: [10/37-99/250], rank: [1/1], Loss: 0.8044, Loss avg: 0.8052, lr: 0.066674, BT: 0.86, DT: 0.00
+it: [20/37-99/250], rank: [1/1], Loss: 0.7996, Loss avg: 0.8040, lr: 0.066674, BT: 0.86, DT: 0.00
+it: [30/37-99/250], rank: [1/1], Loss: 0.7993, Loss avg: 0.8046, lr: 0.066674, BT: 0.87, DT: 0.00
+Train [99/250]	rank: [1/1], Loss: 0.8048, Acc: 0.9945, Bal Acc: 0.9876, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [99/250]	Acc: 0.9812, Bal Acc: 0.9634
+it: [10/37-100/250], rank: [1/1], Loss: 0.7902, Loss avg: 0.7948, lr: 0.066081, BT: 0.86, DT: 0.00
+it: [20/37-100/250], rank: [1/1], Loss: 0.8107, Loss avg: 0.7975, lr: 0.066081, BT: 0.87, DT: 0.00
+it: [30/37-100/250], rank: [1/1], Loss: 0.8016, Loss avg: 0.7986, lr: 0.066081, BT: 0.87, DT: 0.00
+Train [100/250]	rank: [1/1], Loss: 0.7986, Acc: 0.9966, Bal Acc: 0.9891, BT: 0.88, DT: 0.02,  epoch time: 32.76
+Test [100/250]	Acc: 0.9719, Bal Acc: 0.9474
+it: [10/37-101/250], rank: [1/1], Loss: 0.8063, Loss avg: 0.8082, lr: 0.065485, BT: 0.87, DT: 0.00
+it: [20/37-101/250], rank: [1/1], Loss: 0.8001, Loss avg: 0.8093, lr: 0.065485, BT: 0.87, DT: 0.00
+it: [30/37-101/250], rank: [1/1], Loss: 0.8259, Loss avg: 0.8093, lr: 0.065485, BT: 0.87, DT: 0.00
+Train [101/250]	rank: [1/1], Loss: 0.8086, Acc: 0.9932, Bal Acc: 0.9837, BT: 0.88, DT: 0.02,  epoch time: 32.57
+Test [101/250]	Acc: 0.9844, Bal Acc: 0.9701
+it: [10/37-102/250], rank: [1/1], Loss: 0.7965, Loss avg: 0.8022, lr: 0.064887, BT: 0.86, DT: 0.00
+it: [20/37-102/250], rank: [1/1], Loss: 0.8222, Loss avg: 0.8044, lr: 0.064887, BT: 0.87, DT: 0.00
+it: [30/37-102/250], rank: [1/1], Loss: 0.7899, Loss avg: 0.8038, lr: 0.064887, BT: 0.87, DT: 0.00
+Train [102/250]	rank: [1/1], Loss: 0.8053, Acc: 0.9932, Bal Acc: 0.9804, BT: 0.89, DT: 0.03,  epoch time: 32.98
+Test [102/250]	Acc: 0.9812, Bal Acc: 0.9704
+it: [10/37-103/250], rank: [1/1], Loss: 0.8165, Loss avg: 0.8066, lr: 0.064287, BT: 0.86, DT: 0.00
+it: [20/37-103/250], rank: [1/1], Loss: 0.8209, Loss avg: 0.8057, lr: 0.064287, BT: 0.87, DT: 0.00
+it: [30/37-103/250], rank: [1/1], Loss: 0.7922, Loss avg: 0.8034, lr: 0.064287, BT: 0.87, DT: 0.00
+Train [103/250]	rank: [1/1], Loss: 0.8064, Acc: 0.9954, Bal Acc: 0.9918, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [103/250]	Acc: 0.9812, Bal Acc: 0.9694
+it: [10/37-104/250], rank: [1/1], Loss: 0.8309, Loss avg: 0.8044, lr: 0.063684, BT: 0.86, DT: 0.00
+it: [20/37-104/250], rank: [1/1], Loss: 0.8254, Loss avg: 0.8077, lr: 0.063684, BT: 0.87, DT: 0.00
+it: [30/37-104/250], rank: [1/1], Loss: 0.7983, Loss avg: 0.8089, lr: 0.063684, BT: 0.87, DT: 0.00
+Train [104/250]	rank: [1/1], Loss: 0.8068, Acc: 0.9954, Bal Acc: 0.9893, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [104/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-105/250], rank: [1/1], Loss: 0.7917, Loss avg: 0.8023, lr: 0.063079, BT: 0.87, DT: 0.00
+it: [20/37-105/250], rank: [1/1], Loss: 0.7984, Loss avg: 0.8026, lr: 0.063079, BT: 0.87, DT: 0.00
+it: [30/37-105/250], rank: [1/1], Loss: 0.8268, Loss avg: 0.8047, lr: 0.063079, BT: 0.87, DT: 0.00
+Train [105/250]	rank: [1/1], Loss: 0.8044, Acc: 0.9958, Bal Acc: 0.9900, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [105/250]	Acc: 0.9812, Bal Acc: 0.9788
+it: [10/37-106/250], rank: [1/1], Loss: 0.7950, Loss avg: 0.8059, lr: 0.062472, BT: 0.87, DT: 0.01
+it: [20/37-106/250], rank: [1/1], Loss: 0.8000, Loss avg: 0.8099, lr: 0.062472, BT: 0.86, DT: 0.00
+it: [30/37-106/250], rank: [1/1], Loss: 0.7994, Loss avg: 0.8094, lr: 0.062472, BT: 0.87, DT: 0.00
+Train [106/250]	rank: [1/1], Loss: 0.8078, Acc: 0.9920, Bal Acc: 0.9808, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [106/250]	Acc: 0.9812, Bal Acc: 0.9715
+it: [10/37-107/250], rank: [1/1], Loss: 0.7992, Loss avg: 0.8007, lr: 0.061863, BT: 0.87, DT: 0.00
+it: [20/37-107/250], rank: [1/1], Loss: 0.7966, Loss avg: 0.8038, lr: 0.061863, BT: 0.87, DT: 0.00
+it: [30/37-107/250], rank: [1/1], Loss: 0.8222, Loss avg: 0.8034, lr: 0.061863, BT: 0.87, DT: 0.00
+Train [107/250]	rank: [1/1], Loss: 0.8028, Acc: 0.9958, Bal Acc: 0.9887, BT: 0.88, DT: 0.02,  epoch time: 32.54
+Test [107/250]	Acc: 0.9812, Bal Acc: 0.9705
+it: [10/37-108/250], rank: [1/1], Loss: 0.7991, Loss avg: 0.7966, lr: 0.061252, BT: 0.86, DT: 0.00
+it: [20/37-108/250], rank: [1/1], Loss: 0.7930, Loss avg: 0.7985, lr: 0.061252, BT: 0.87, DT: 0.00
+it: [30/37-108/250], rank: [1/1], Loss: 0.8034, Loss avg: 0.7987, lr: 0.061252, BT: 0.87, DT: 0.00
+Train [108/250]	rank: [1/1], Loss: 0.7989, Acc: 0.9966, Bal Acc: 0.9864, BT: 0.89, DT: 0.03,  epoch time: 32.97
+Test [108/250]	Acc: 0.9781, Bal Acc: 0.9600
+it: [10/37-109/250], rank: [1/1], Loss: 0.7946, Loss avg: 0.7983, lr: 0.060640, BT: 0.87, DT: 0.00
+it: [20/37-109/250], rank: [1/1], Loss: 0.7980, Loss avg: 0.8017, lr: 0.060640, BT: 0.87, DT: 0.00
+it: [30/37-109/250], rank: [1/1], Loss: 0.8123, Loss avg: 0.8028, lr: 0.060640, BT: 0.86, DT: 0.00
+Train [109/250]	rank: [1/1], Loss: 0.8033, Acc: 0.9941, Bal Acc: 0.9848, BT: 0.88, DT: 0.02,  epoch time: 32.71
+Test [109/250]	Acc: 0.9812, Bal Acc: 0.9715
+it: [10/37-110/250], rank: [1/1], Loss: 0.8074, Loss avg: 0.8038, lr: 0.060026, BT: 0.87, DT: 0.00
+it: [20/37-110/250], rank: [1/1], Loss: 0.8017, Loss avg: 0.8039, lr: 0.060026, BT: 0.87, DT: 0.01
+it: [30/37-110/250], rank: [1/1], Loss: 0.7920, Loss avg: 0.8040, lr: 0.060026, BT: 0.87, DT: 0.00
+Train [110/250]	rank: [1/1], Loss: 0.8035, Acc: 0.9958, Bal Acc: 0.9904, BT: 0.88, DT: 0.02,  epoch time: 32.69
+Test [110/250]	Acc: 0.9812, Bal Acc: 0.9713
+it: [10/37-111/250], rank: [1/1], Loss: 0.8038, Loss avg: 0.8016, lr: 0.059410, BT: 0.86, DT: 0.00
+it: [20/37-111/250], rank: [1/1], Loss: 0.7946, Loss avg: 0.8023, lr: 0.059410, BT: 0.86, DT: 0.00
+it: [30/37-111/250], rank: [1/1], Loss: 0.7947, Loss avg: 0.8020, lr: 0.059410, BT: 0.86, DT: 0.00
+Train [111/250]	rank: [1/1], Loss: 0.8029, Acc: 0.9970, Bal Acc: 0.9925, BT: 0.88, DT: 0.02,  epoch time: 32.58
+Test [111/250]	Acc: 0.9750, Bal Acc: 0.9594
+it: [10/37-112/250], rank: [1/1], Loss: 0.8004, Loss avg: 0.7967, lr: 0.058792, BT: 0.87, DT: 0.01
+it: [20/37-112/250], rank: [1/1], Loss: 0.7976, Loss avg: 0.7998, lr: 0.058792, BT: 0.87, DT: 0.00
+it: [30/37-112/250], rank: [1/1], Loss: 0.8075, Loss avg: 0.7998, lr: 0.058792, BT: 0.86, DT: 0.00
+Train [112/250]	rank: [1/1], Loss: 0.8009, Acc: 0.9979, Bal Acc: 0.9944, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [112/250]	Acc: 0.9750, Bal Acc: 0.9579
+it: [10/37-113/250], rank: [1/1], Loss: 0.8042, Loss avg: 0.8001, lr: 0.058174, BT: 0.86, DT: 0.00
+it: [20/37-113/250], rank: [1/1], Loss: 0.7888, Loss avg: 0.8010, lr: 0.058174, BT: 0.87, DT: 0.00
+it: [30/37-113/250], rank: [1/1], Loss: 0.8273, Loss avg: 0.8035, lr: 0.058174, BT: 0.86, DT: 0.00
+Train [113/250]	rank: [1/1], Loss: 0.8031, Acc: 0.9958, Bal Acc: 0.9900, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [113/250]	Acc: 0.9750, Bal Acc: 0.9583
+it: [10/37-114/250], rank: [1/1], Loss: 0.7914, Loss avg: 0.8005, lr: 0.057554, BT: 0.86, DT: 0.00
+it: [20/37-114/250], rank: [1/1], Loss: 0.8026, Loss avg: 0.8020, lr: 0.057554, BT: 0.87, DT: 0.00
+it: [30/37-114/250], rank: [1/1], Loss: 0.7930, Loss avg: 0.8015, lr: 0.057554, BT: 0.87, DT: 0.00
+Train [114/250]	rank: [1/1], Loss: 0.8020, Acc: 0.9949, Bal Acc: 0.9875, BT: 0.89, DT: 0.03,  epoch time: 32.93
+Test [114/250]	Acc: 0.9781, Bal Acc: 0.9492
+it: [10/37-115/250], rank: [1/1], Loss: 0.8035, Loss avg: 0.8077, lr: 0.056933, BT: 0.87, DT: 0.00
+it: [20/37-115/250], rank: [1/1], Loss: 0.8089, Loss avg: 0.8038, lr: 0.056933, BT: 0.87, DT: 0.00
+it: [30/37-115/250], rank: [1/1], Loss: 0.7963, Loss avg: 0.8033, lr: 0.056933, BT: 0.86, DT: 0.00
+Train [115/250]	rank: [1/1], Loss: 0.8040, Acc: 0.9945, Bal Acc: 0.9869, BT: 0.88, DT: 0.02,  epoch time: 32.69
+Test [115/250]	Acc: 0.9750, Bal Acc: 0.9561
+it: [10/37-116/250], rank: [1/1], Loss: 0.7923, Loss avg: 0.8033, lr: 0.056310, BT: 0.87, DT: 0.00
+it: [20/37-116/250], rank: [1/1], Loss: 0.8076, Loss avg: 0.8012, lr: 0.056310, BT: 0.86, DT: 0.00
+it: [30/37-116/250], rank: [1/1], Loss: 0.8033, Loss avg: 0.8006, lr: 0.056310, BT: 0.87, DT: 0.00
+Train [116/250]	rank: [1/1], Loss: 0.8013, Acc: 0.9975, Bal Acc: 0.9928, BT: 0.88, DT: 0.02,  epoch time: 32.54
+Test [116/250]	Acc: 0.9844, Bal Acc: 0.9735
+it: [10/37-117/250], rank: [1/1], Loss: 0.7914, Loss avg: 0.8041, lr: 0.055687, BT: 0.87, DT: 0.01
+it: [20/37-117/250], rank: [1/1], Loss: 0.7901, Loss avg: 0.8063, lr: 0.055687, BT: 0.86, DT: 0.00
+it: [30/37-117/250], rank: [1/1], Loss: 0.8018, Loss avg: 0.8060, lr: 0.055687, BT: 0.86, DT: 0.00
+Train [117/250]	rank: [1/1], Loss: 0.8048, Acc: 0.9949, Bal Acc: 0.9866, BT: 0.87, DT: 0.01,  epoch time: 32.41
+Test [117/250]	Acc: 0.9781, Bal Acc: 0.9582
+it: [10/37-118/250], rank: [1/1], Loss: 0.8096, Loss avg: 0.7999, lr: 0.055063, BT: 0.87, DT: 0.01
+it: [20/37-118/250], rank: [1/1], Loss: 0.7991, Loss avg: 0.8003, lr: 0.055063, BT: 0.87, DT: 0.00
+it: [30/37-118/250], rank: [1/1], Loss: 0.8035, Loss avg: 0.8018, lr: 0.055063, BT: 0.87, DT: 0.00
+Train [118/250]	rank: [1/1], Loss: 0.8007, Acc: 0.9975, Bal Acc: 0.9923, BT: 0.88, DT: 0.01,  epoch time: 32.51
+Test [118/250]	Acc: 0.9750, Bal Acc: 0.9494
+it: [10/37-119/250], rank: [1/1], Loss: 0.8344, Loss avg: 0.8050, lr: 0.054438, BT: 0.86, DT: 0.00
+it: [20/37-119/250], rank: [1/1], Loss: 0.7977, Loss avg: 0.8027, lr: 0.054438, BT: 0.87, DT: 0.01
+it: [30/37-119/250], rank: [1/1], Loss: 0.8084, Loss avg: 0.8042, lr: 0.054438, BT: 0.87, DT: 0.00
+Train [119/250]	rank: [1/1], Loss: 0.8038, Acc: 0.9945, Bal Acc: 0.9882, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [119/250]	Acc: 0.9812, Bal Acc: 0.9693
+it: [10/37-120/250], rank: [1/1], Loss: 0.7928, Loss avg: 0.7972, lr: 0.053813, BT: 0.87, DT: 0.00
+it: [20/37-120/250], rank: [1/1], Loss: 0.8245, Loss avg: 0.7998, lr: 0.053813, BT: 0.86, DT: 0.00
+it: [30/37-120/250], rank: [1/1], Loss: 0.8057, Loss avg: 0.7997, lr: 0.053813, BT: 0.86, DT: 0.00
+Train [120/250]	rank: [1/1], Loss: 0.8006, Acc: 0.9970, Bal Acc: 0.9937, BT: 0.89, DT: 0.03,  epoch time: 32.92
+Test [120/250]	Acc: 0.9812, Bal Acc: 0.9692
+it: [10/37-121/250], rank: [1/1], Loss: 0.7987, Loss avg: 0.7954, lr: 0.053186, BT: 0.86, DT: 0.00
+it: [20/37-121/250], rank: [1/1], Loss: 0.8109, Loss avg: 0.8004, lr: 0.053186, BT: 0.86, DT: 0.00
+it: [30/37-121/250], rank: [1/1], Loss: 0.7984, Loss avg: 0.8007, lr: 0.053186, BT: 0.87, DT: 0.00
+Train [121/250]	rank: [1/1], Loss: 0.8009, Acc: 0.9966, Bal Acc: 0.9892, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [121/250]	Acc: 0.9781, Bal Acc: 0.9614
+it: [10/37-122/250], rank: [1/1], Loss: 0.7955, Loss avg: 0.7976, lr: 0.052560, BT: 0.87, DT: 0.00
+it: [20/37-122/250], rank: [1/1], Loss: 0.7949, Loss avg: 0.7975, lr: 0.052560, BT: 0.87, DT: 0.00
+it: [30/37-122/250], rank: [1/1], Loss: 0.8004, Loss avg: 0.7977, lr: 0.052560, BT: 0.87, DT: 0.00
+Train [122/250]	rank: [1/1], Loss: 0.7991, Acc: 0.9970, Bal Acc: 0.9922, BT: 0.88, DT: 0.02,  epoch time: 32.77
+Test [122/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-123/250], rank: [1/1], Loss: 0.7928, Loss avg: 0.8008, lr: 0.051933, BT: 0.87, DT: 0.00
+it: [20/37-123/250], rank: [1/1], Loss: 0.7970, Loss avg: 0.8026, lr: 0.051933, BT: 0.86, DT: 0.00
+it: [30/37-123/250], rank: [1/1], Loss: 0.7919, Loss avg: 0.8006, lr: 0.051933, BT: 0.86, DT: 0.00
+Train [123/250]	rank: [1/1], Loss: 0.8005, Acc: 0.9970, Bal Acc: 0.9939, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [123/250]	Acc: 0.9719, Bal Acc: 0.9539
+it: [10/37-124/250], rank: [1/1], Loss: 0.7917, Loss avg: 0.7993, lr: 0.051305, BT: 0.87, DT: 0.00
+it: [20/37-124/250], rank: [1/1], Loss: 0.7892, Loss avg: 0.7978, lr: 0.051305, BT: 0.87, DT: 0.00
+it: [30/37-124/250], rank: [1/1], Loss: 0.7967, Loss avg: 0.7964, lr: 0.051305, BT: 0.87, DT: 0.00
+Train [124/250]	rank: [1/1], Loss: 0.7979, Acc: 0.9975, Bal Acc: 0.9927, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [124/250]	Acc: 0.9812, Bal Acc: 0.9705
+it: [10/37-125/250], rank: [1/1], Loss: 0.7946, Loss avg: 0.7998, lr: 0.050678, BT: 0.87, DT: 0.00
+it: [20/37-125/250], rank: [1/1], Loss: 0.8097, Loss avg: 0.7979, lr: 0.050678, BT: 0.87, DT: 0.00
+it: [30/37-125/250], rank: [1/1], Loss: 0.7951, Loss avg: 0.7992, lr: 0.050678, BT: 0.87, DT: 0.00
+Train [125/250]	rank: [1/1], Loss: 0.7988, Acc: 0.9983, Bal Acc: 0.9964, BT: 0.88, DT: 0.02,  epoch time: 32.72
+Test [125/250]	Acc: 0.9844, Bal Acc: 0.9791
+it: [10/37-126/250], rank: [1/1], Loss: 0.7899, Loss avg: 0.7997, lr: 0.050050, BT: 0.86, DT: 0.00
+it: [20/37-126/250], rank: [1/1], Loss: 0.7985, Loss avg: 0.8003, lr: 0.050050, BT: 0.87, DT: 0.00
+it: [30/37-126/250], rank: [1/1], Loss: 0.8035, Loss avg: 0.8008, lr: 0.050050, BT: 0.86, DT: 0.00
+Train [126/250]	rank: [1/1], Loss: 0.8017, Acc: 0.9958, Bal Acc: 0.9866, BT: 0.89, DT: 0.03,  epoch time: 32.97
+Test [126/250]	Acc: 0.9750, Bal Acc: 0.9651
+it: [10/37-127/250], rank: [1/1], Loss: 0.7944, Loss avg: 0.7992, lr: 0.049422, BT: 0.86, DT: 0.00
+it: [20/37-127/250], rank: [1/1], Loss: 0.8044, Loss avg: 0.7991, lr: 0.049422, BT: 0.87, DT: 0.00
+it: [30/37-127/250], rank: [1/1], Loss: 0.7946, Loss avg: 0.7990, lr: 0.049422, BT: 0.86, DT: 0.00
+Train [127/250]	rank: [1/1], Loss: 0.7997, Acc: 0.9962, Bal Acc: 0.9862, BT: 0.88, DT: 0.02,  epoch time: 32.59
+Test [127/250]	Acc: 0.9844, Bal Acc: 0.9736
+it: [10/37-128/250], rank: [1/1], Loss: 0.8142, Loss avg: 0.8000, lr: 0.048795, BT: 0.86, DT: 0.00
+it: [20/37-128/250], rank: [1/1], Loss: 0.7938, Loss avg: 0.7992, lr: 0.048795, BT: 0.86, DT: 0.00
+it: [30/37-128/250], rank: [1/1], Loss: 0.8016, Loss avg: 0.7999, lr: 0.048795, BT: 0.87, DT: 0.00
+Train [128/250]	rank: [1/1], Loss: 0.7997, Acc: 0.9983, Bal Acc: 0.9975, BT: 0.88, DT: 0.02,  epoch time: 32.65
+Test [128/250]	Acc: 0.9844, Bal Acc: 0.9815
+it: [10/37-129/250], rank: [1/1], Loss: 0.7935, Loss avg: 0.8015, lr: 0.048167, BT: 0.87, DT: 0.00
+it: [20/37-129/250], rank: [1/1], Loss: 0.7965, Loss avg: 0.8017, lr: 0.048167, BT: 0.86, DT: 0.00
+it: [30/37-129/250], rank: [1/1], Loss: 0.7976, Loss avg: 0.8045, lr: 0.048167, BT: 0.87, DT: 0.00
+Train [129/250]	rank: [1/1], Loss: 0.8042, Acc: 0.9958, Bal Acc: 0.9873, BT: 0.88, DT: 0.02,  epoch time: 32.52
+Test [129/250]	Acc: 0.9812, Bal Acc: 0.9693
+it: [10/37-130/250], rank: [1/1], Loss: 0.7912, Loss avg: 0.7997, lr: 0.047540, BT: 0.87, DT: 0.00
+it: [20/37-130/250], rank: [1/1], Loss: 0.7944, Loss avg: 0.7989, lr: 0.047540, BT: 0.87, DT: 0.00
+it: [30/37-130/250], rank: [1/1], Loss: 0.7915, Loss avg: 0.7997, lr: 0.047540, BT: 0.86, DT: 0.00
+Train [130/250]	rank: [1/1], Loss: 0.7997, Acc: 0.9970, Bal Acc: 0.9953, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [130/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-131/250], rank: [1/1], Loss: 0.7977, Loss avg: 0.7998, lr: 0.046914, BT: 0.86, DT: 0.00
+it: [20/37-131/250], rank: [1/1], Loss: 0.7982, Loss avg: 0.7995, lr: 0.046914, BT: 0.86, DT: 0.00
+it: [30/37-131/250], rank: [1/1], Loss: 0.7978, Loss avg: 0.8006, lr: 0.046914, BT: 0.86, DT: 0.00
+Train [131/250]	rank: [1/1], Loss: 0.8000, Acc: 0.9975, Bal Acc: 0.9898, BT: 0.88, DT: 0.02,  epoch time: 32.58
+Test [131/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-132/250], rank: [1/1], Loss: 0.7986, Loss avg: 0.7992, lr: 0.046287, BT: 0.86, DT: 0.00
+it: [20/37-132/250], rank: [1/1], Loss: 0.8033, Loss avg: 0.7970, lr: 0.046287, BT: 0.86, DT: 0.00
+it: [30/37-132/250], rank: [1/1], Loss: 0.7940, Loss avg: 0.7979, lr: 0.046287, BT: 0.87, DT: 0.00
+Train [132/250]	rank: [1/1], Loss: 0.7982, Acc: 0.9970, Bal Acc: 0.9925, BT: 0.89, DT: 0.03,  epoch time: 32.90
+Test [132/250]	Acc: 0.9781, Bal Acc: 0.9684
+it: [10/37-133/250], rank: [1/1], Loss: 0.7978, Loss avg: 0.7998, lr: 0.045662, BT: 0.87, DT: 0.00
+it: [20/37-133/250], rank: [1/1], Loss: 0.8037, Loss avg: 0.8017, lr: 0.045662, BT: 0.87, DT: 0.00
+it: [30/37-133/250], rank: [1/1], Loss: 0.7932, Loss avg: 0.8013, lr: 0.045662, BT: 0.86, DT: 0.00
+Train [133/250]	rank: [1/1], Loss: 0.8025, Acc: 0.9962, Bal Acc: 0.9894, BT: 0.88, DT: 0.01,  epoch time: 32.48
+Test [133/250]	Acc: 0.9750, Bal Acc: 0.9577
+it: [10/37-134/250], rank: [1/1], Loss: 0.7948, Loss avg: 0.7968, lr: 0.045037, BT: 0.87, DT: 0.00
+it: [20/37-134/250], rank: [1/1], Loss: 0.8241, Loss avg: 0.8015, lr: 0.045037, BT: 0.86, DT: 0.00
+it: [30/37-134/250], rank: [1/1], Loss: 0.8030, Loss avg: 0.8023, lr: 0.045037, BT: 0.86, DT: 0.00
+Train [134/250]	rank: [1/1], Loss: 0.8012, Acc: 0.9949, Bal Acc: 0.9849, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [134/250]	Acc: 0.9812, Bal Acc: 0.9704
+it: [10/37-135/250], rank: [1/1], Loss: 0.7940, Loss avg: 0.7963, lr: 0.044413, BT: 0.86, DT: 0.00
+it: [20/37-135/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.7958, lr: 0.044413, BT: 0.87, DT: 0.00
+it: [30/37-135/250], rank: [1/1], Loss: 0.8103, Loss avg: 0.7978, lr: 0.044413, BT: 0.86, DT: 0.00
+Train [135/250]	rank: [1/1], Loss: 0.7976, Acc: 0.9979, Bal Acc: 0.9943, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [135/250]	Acc: 0.9812, Bal Acc: 0.9714
+it: [10/37-136/250], rank: [1/1], Loss: 0.7938, Loss avg: 0.7959, lr: 0.043790, BT: 0.87, DT: 0.00
+it: [20/37-136/250], rank: [1/1], Loss: 0.8034, Loss avg: 0.7981, lr: 0.043790, BT: 0.87, DT: 0.00
+it: [30/37-136/250], rank: [1/1], Loss: 0.7930, Loss avg: 0.7973, lr: 0.043790, BT: 0.86, DT: 0.00
+Train [136/250]	rank: [1/1], Loss: 0.7987, Acc: 0.9975, Bal Acc: 0.9913, BT: 0.88, DT: 0.02,  epoch time: 32.78
+Test [136/250]	Acc: 0.9812, Bal Acc: 0.9620
+it: [10/37-137/250], rank: [1/1], Loss: 0.7943, Loss avg: 0.7999, lr: 0.043167, BT: 0.86, DT: 0.00
+it: [20/37-137/250], rank: [1/1], Loss: 0.7921, Loss avg: 0.8000, lr: 0.043167, BT: 0.86, DT: 0.00
+it: [30/37-137/250], rank: [1/1], Loss: 0.7957, Loss avg: 0.8005, lr: 0.043167, BT: 0.87, DT: 0.00
+Train [137/250]	rank: [1/1], Loss: 0.7997, Acc: 0.9970, Bal Acc: 0.9908, BT: 0.88, DT: 0.01,  epoch time: 32.47
+Test [137/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-138/250], rank: [1/1], Loss: 0.7951, Loss avg: 0.7992, lr: 0.042546, BT: 0.86, DT: 0.00
+it: [20/37-138/250], rank: [1/1], Loss: 0.7963, Loss avg: 0.7986, lr: 0.042546, BT: 0.86, DT: 0.00
+it: [30/37-138/250], rank: [1/1], Loss: 0.8208, Loss avg: 0.8005, lr: 0.042546, BT: 0.86, DT: 0.00
+Train [138/250]	rank: [1/1], Loss: 0.8000, Acc: 0.9979, Bal Acc: 0.9959, BT: 0.89, DT: 0.03,  epoch time: 32.93
+Test [138/250]	Acc: 0.9781, Bal Acc: 0.9563
+it: [10/37-139/250], rank: [1/1], Loss: 0.7928, Loss avg: 0.8007, lr: 0.041926, BT: 0.87, DT: 0.00
+it: [20/37-139/250], rank: [1/1], Loss: 0.7959, Loss avg: 0.8013, lr: 0.041926, BT: 0.87, DT: 0.00
+it: [30/37-139/250], rank: [1/1], Loss: 0.7928, Loss avg: 0.7994, lr: 0.041926, BT: 0.86, DT: 0.00
+Train [139/250]	rank: [1/1], Loss: 0.7995, Acc: 0.9966, Bal Acc: 0.9907, BT: 0.88, DT: 0.02,  epoch time: 32.65
+Test [139/250]	Acc: 0.9781, Bal Acc: 0.9678
+it: [10/37-140/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.7993, lr: 0.041308, BT: 0.86, DT: 0.00
+it: [20/37-140/250], rank: [1/1], Loss: 0.7905, Loss avg: 0.7978, lr: 0.041308, BT: 0.86, DT: 0.00
+it: [30/37-140/250], rank: [1/1], Loss: 0.7971, Loss avg: 0.7962, lr: 0.041308, BT: 0.86, DT: 0.00
+Train [140/250]	rank: [1/1], Loss: 0.7958, Acc: 0.9987, Bal Acc: 0.9965, BT: 0.88, DT: 0.02,  epoch time: 32.72
+Test [140/250]	Acc: 0.9844, Bal Acc: 0.9815
+it: [10/37-141/250], rank: [1/1], Loss: 0.8471, Loss avg: 0.8003, lr: 0.040690, BT: 0.86, DT: 0.00
+it: [20/37-141/250], rank: [1/1], Loss: 0.7935, Loss avg: 0.7982, lr: 0.040690, BT: 0.87, DT: 0.00
+it: [30/37-141/250], rank: [1/1], Loss: 0.7918, Loss avg: 0.7980, lr: 0.040690, BT: 0.86, DT: 0.00
+Train [141/250]	rank: [1/1], Loss: 0.7974, Acc: 0.9983, Bal Acc: 0.9962, BT: 0.88, DT: 0.02,  epoch time: 32.56
+Test [141/250]	Acc: 0.9781, Bal Acc: 0.9615
+it: [10/37-142/250], rank: [1/1], Loss: 0.7958, Loss avg: 0.7976, lr: 0.040074, BT: 0.86, DT: 0.00
+it: [20/37-142/250], rank: [1/1], Loss: 0.7997, Loss avg: 0.7980, lr: 0.040074, BT: 0.87, DT: 0.00
+it: [30/37-142/250], rank: [1/1], Loss: 0.7986, Loss avg: 0.7970, lr: 0.040074, BT: 0.86, DT: 0.00
+Train [142/250]	rank: [1/1], Loss: 0.7970, Acc: 0.9979, Bal Acc: 0.9929, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [142/250]	Acc: 0.9750, Bal Acc: 0.9575
+it: [10/37-143/250], rank: [1/1], Loss: 0.8020, Loss avg: 0.7974, lr: 0.039460, BT: 0.87, DT: 0.00
+it: [20/37-143/250], rank: [1/1], Loss: 0.7966, Loss avg: 0.7974, lr: 0.039460, BT: 0.86, DT: 0.00
+it: [30/37-143/250], rank: [1/1], Loss: 0.7910, Loss avg: 0.7964, lr: 0.039460, BT: 0.86, DT: 0.00
+Train [143/250]	rank: [1/1], Loss: 0.7971, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.01,  epoch time: 32.51
+Test [143/250]	Acc: 0.9812, Bal Acc: 0.9790
+it: [10/37-144/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.7983, lr: 0.038848, BT: 0.87, DT: 0.01
+it: [20/37-144/250], rank: [1/1], Loss: 0.8021, Loss avg: 0.7991, lr: 0.038848, BT: 0.87, DT: 0.00
+it: [30/37-144/250], rank: [1/1], Loss: 0.7866, Loss avg: 0.8002, lr: 0.038848, BT: 0.87, DT: 0.00
+Train [144/250]	rank: [1/1], Loss: 0.7998, Acc: 0.9975, Bal Acc: 0.9930, BT: 0.89, DT: 0.02,  epoch time: 32.90
+Test [144/250]	Acc: 0.9750, Bal Acc: 0.9587
+it: [10/37-145/250], rank: [1/1], Loss: 0.7945, Loss avg: 0.7957, lr: 0.038237, BT: 0.87, DT: 0.00
+it: [20/37-145/250], rank: [1/1], Loss: 0.7952, Loss avg: 0.7959, lr: 0.038237, BT: 0.86, DT: 0.00
+it: [30/37-145/250], rank: [1/1], Loss: 0.8226, Loss avg: 0.7978, lr: 0.038237, BT: 0.87, DT: 0.00
+Train [145/250]	rank: [1/1], Loss: 0.7977, Acc: 0.9975, Bal Acc: 0.9926, BT: 0.88, DT: 0.02,  epoch time: 32.65
+Test [145/250]	Acc: 0.9781, Bal Acc: 0.9614
+it: [10/37-146/250], rank: [1/1], Loss: 0.7948, Loss avg: 0.8004, lr: 0.037628, BT: 0.87, DT: 0.00
+it: [20/37-146/250], rank: [1/1], Loss: 0.7916, Loss avg: 0.7983, lr: 0.037628, BT: 0.86, DT: 0.00
+it: [30/37-146/250], rank: [1/1], Loss: 0.7931, Loss avg: 0.7979, lr: 0.037628, BT: 0.86, DT: 0.00
+Train [146/250]	rank: [1/1], Loss: 0.7991, Acc: 0.9992, Bal Acc: 0.9969, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [146/250]	Acc: 0.9781, Bal Acc: 0.9693
+it: [10/37-147/250], rank: [1/1], Loss: 0.7972, Loss avg: 0.7984, lr: 0.037021, BT: 0.87, DT: 0.00
+it: [20/37-147/250], rank: [1/1], Loss: 0.7965, Loss avg: 0.7982, lr: 0.037021, BT: 0.87, DT: 0.00
+it: [30/37-147/250], rank: [1/1], Loss: 0.7917, Loss avg: 0.7984, lr: 0.037021, BT: 0.86, DT: 0.00
+Train [147/250]	rank: [1/1], Loss: 0.7991, Acc: 0.9966, Bal Acc: 0.9924, BT: 0.88, DT: 0.01,  epoch time: 32.55
+Test [147/250]	Acc: 0.9844, Bal Acc: 0.9804
+it: [10/37-148/250], rank: [1/1], Loss: 0.7928, Loss avg: 0.7992, lr: 0.036416, BT: 0.87, DT: 0.01
+it: [20/37-148/250], rank: [1/1], Loss: 0.7920, Loss avg: 0.7971, lr: 0.036416, BT: 0.86, DT: 0.00
+it: [30/37-148/250], rank: [1/1], Loss: 0.7941, Loss avg: 0.7960, lr: 0.036416, BT: 0.87, DT: 0.00
+Train [148/250]	rank: [1/1], Loss: 0.7958, Acc: 0.9983, Bal Acc: 0.9945, BT: 0.88, DT: 0.02,  epoch time: 32.72
+Test [148/250]	Acc: 0.9781, Bal Acc: 0.9693
+it: [10/37-149/250], rank: [1/1], Loss: 0.8011, Loss avg: 0.7960, lr: 0.035813, BT: 0.87, DT: 0.00
+it: [20/37-149/250], rank: [1/1], Loss: 0.7910, Loss avg: 0.7976, lr: 0.035813, BT: 0.87, DT: 0.00
+it: [30/37-149/250], rank: [1/1], Loss: 0.7922, Loss avg: 0.7960, lr: 0.035813, BT: 0.87, DT: 0.00
+Train [149/250]	rank: [1/1], Loss: 0.7968, Acc: 0.9983, Bal Acc: 0.9974, BT: 0.88, DT: 0.02,  epoch time: 32.57
+Test [149/250]	Acc: 0.9656, Bal Acc: 0.9373
+it: [10/37-150/250], rank: [1/1], Loss: 0.7932, Loss avg: 0.7955, lr: 0.035213, BT: 0.87, DT: 0.00
+it: [20/37-150/250], rank: [1/1], Loss: 0.7992, Loss avg: 0.7966, lr: 0.035213, BT: 0.87, DT: 0.00
+it: [30/37-150/250], rank: [1/1], Loss: 0.7935, Loss avg: 0.7971, lr: 0.035213, BT: 0.87, DT: 0.00
+Train [150/250]	rank: [1/1], Loss: 0.7968, Acc: 0.9979, Bal Acc: 0.9910, BT: 0.89, DT: 0.02,  epoch time: 32.88
+Test [150/250]	Acc: 0.9844, Bal Acc: 0.9804
+it: [10/37-151/250], rank: [1/1], Loss: 0.8086, Loss avg: 0.7999, lr: 0.034615, BT: 0.87, DT: 0.00
+it: [20/37-151/250], rank: [1/1], Loss: 0.7950, Loss avg: 0.8006, lr: 0.034615, BT: 0.87, DT: 0.00
+it: [30/37-151/250], rank: [1/1], Loss: 0.7960, Loss avg: 0.7985, lr: 0.034615, BT: 0.86, DT: 0.00
+Train [151/250]	rank: [1/1], Loss: 0.7977, Acc: 0.9975, Bal Acc: 0.9958, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [151/250]	Acc: 0.9812, Bal Acc: 0.9716
+it: [10/37-152/250], rank: [1/1], Loss: 0.8056, Loss avg: 0.7999, lr: 0.034019, BT: 0.86, DT: 0.00
+it: [20/37-152/250], rank: [1/1], Loss: 0.7968, Loss avg: 0.7977, lr: 0.034019, BT: 0.87, DT: 0.00
+it: [30/37-152/250], rank: [1/1], Loss: 0.8023, Loss avg: 0.7970, lr: 0.034019, BT: 0.87, DT: 0.00
+Train [152/250]	rank: [1/1], Loss: 0.7968, Acc: 0.9975, Bal Acc: 0.9926, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [152/250]	Acc: 0.9812, Bal Acc: 0.9694
+it: [10/37-153/250], rank: [1/1], Loss: 0.8029, Loss avg: 0.7947, lr: 0.033426, BT: 0.87, DT: 0.00
+it: [20/37-153/250], rank: [1/1], Loss: 0.8266, Loss avg: 0.7974, lr: 0.033426, BT: 0.86, DT: 0.00
+it: [30/37-153/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7968, lr: 0.033426, BT: 0.86, DT: 0.00
+Train [153/250]	rank: [1/1], Loss: 0.7970, Acc: 0.9987, Bal Acc: 0.9965, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [153/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-154/250], rank: [1/1], Loss: 0.7941, Loss avg: 0.7973, lr: 0.032835, BT: 0.86, DT: 0.00
+it: [20/37-154/250], rank: [1/1], Loss: 0.7962, Loss avg: 0.7972, lr: 0.032835, BT: 0.86, DT: 0.00
+it: [30/37-154/250], rank: [1/1], Loss: 0.7954, Loss avg: 0.7960, lr: 0.032835, BT: 0.86, DT: 0.00
+Train [154/250]	rank: [1/1], Loss: 0.7957, Acc: 0.9992, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [154/250]	Acc: 0.9781, Bal Acc: 0.9659
+it: [10/37-155/250], rank: [1/1], Loss: 0.7888, Loss avg: 0.7956, lr: 0.032247, BT: 0.87, DT: 0.00
+it: [20/37-155/250], rank: [1/1], Loss: 0.8068, Loss avg: 0.7961, lr: 0.032247, BT: 0.86, DT: 0.00
+it: [30/37-155/250], rank: [1/1], Loss: 0.8015, Loss avg: 0.7950, lr: 0.032247, BT: 0.87, DT: 0.00
+Train [155/250]	rank: [1/1], Loss: 0.7955, Acc: 0.9987, Bal Acc: 0.9977, BT: 0.88, DT: 0.01,  epoch time: 32.45
+Test [155/250]	Acc: 0.9781, Bal Acc: 0.9694
+it: [10/37-156/250], rank: [1/1], Loss: 0.7924, Loss avg: 0.7945, lr: 0.031662, BT: 0.86, DT: 0.00
+it: [20/37-156/250], rank: [1/1], Loss: 0.8001, Loss avg: 0.7959, lr: 0.031662, BT: 0.87, DT: 0.00
+it: [30/37-156/250], rank: [1/1], Loss: 0.8082, Loss avg: 0.7971, lr: 0.031662, BT: 0.86, DT: 0.00
+Train [156/250]	rank: [1/1], Loss: 0.7973, Acc: 0.9970, Bal Acc: 0.9923, BT: 0.89, DT: 0.02,  epoch time: 32.89
+Test [156/250]	Acc: 0.9844, Bal Acc: 0.9737
+it: [10/37-157/250], rank: [1/1], Loss: 0.8106, Loss avg: 0.7980, lr: 0.031080, BT: 0.86, DT: 0.00
+it: [20/37-157/250], rank: [1/1], Loss: 0.7996, Loss avg: 0.7971, lr: 0.031080, BT: 0.87, DT: 0.00
+it: [30/37-157/250], rank: [1/1], Loss: 0.8095, Loss avg: 0.7987, lr: 0.031080, BT: 0.87, DT: 0.00
+Train [157/250]	rank: [1/1], Loss: 0.7984, Acc: 0.9983, Bal Acc: 0.9964, BT: 0.89, DT: 0.02,  epoch time: 32.87
+Test [157/250]	Acc: 0.9812, Bal Acc: 0.9788
+it: [10/37-158/250], rank: [1/1], Loss: 0.7959, Loss avg: 0.7983, lr: 0.030501, BT: 0.87, DT: 0.00
+it: [20/37-158/250], rank: [1/1], Loss: 0.7875, Loss avg: 0.7964, lr: 0.030501, BT: 0.87, DT: 0.00
+it: [30/37-158/250], rank: [1/1], Loss: 0.7997, Loss avg: 0.7954, lr: 0.030501, BT: 0.86, DT: 0.00
+Train [158/250]	rank: [1/1], Loss: 0.7959, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [158/250]	Acc: 0.9781, Bal Acc: 0.9683
+it: [10/37-159/250], rank: [1/1], Loss: 0.8006, Loss avg: 0.7974, lr: 0.029925, BT: 0.87, DT: 0.00
+it: [20/37-159/250], rank: [1/1], Loss: 0.7899, Loss avg: 0.7967, lr: 0.029925, BT: 0.86, DT: 0.00
+it: [30/37-159/250], rank: [1/1], Loss: 0.8029, Loss avg: 0.7976, lr: 0.029925, BT: 0.87, DT: 0.00
+Train [159/250]	rank: [1/1], Loss: 0.7980, Acc: 0.9958, Bal Acc: 0.9884, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [159/250]	Acc: 0.9781, Bal Acc: 0.9684
+it: [10/37-160/250], rank: [1/1], Loss: 0.8019, Loss avg: 0.7982, lr: 0.029352, BT: 0.87, DT: 0.00
+it: [20/37-160/250], rank: [1/1], Loss: 0.7902, Loss avg: 0.7974, lr: 0.029352, BT: 0.87, DT: 0.00
+it: [30/37-160/250], rank: [1/1], Loss: 0.7977, Loss avg: 0.7985, lr: 0.029352, BT: 0.87, DT: 0.00
+Train [160/250]	rank: [1/1], Loss: 0.7983, Acc: 0.9966, Bal Acc: 0.9894, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [160/250]	Acc: 0.9781, Bal Acc: 0.9693
+it: [10/37-161/250], rank: [1/1], Loss: 0.8045, Loss avg: 0.7959, lr: 0.028782, BT: 0.87, DT: 0.00
+it: [20/37-161/250], rank: [1/1], Loss: 0.7933, Loss avg: 0.7961, lr: 0.028782, BT: 0.87, DT: 0.00
+it: [30/37-161/250], rank: [1/1], Loss: 0.7941, Loss avg: 0.7959, lr: 0.028782, BT: 0.86, DT: 0.00
+Train [161/250]	rank: [1/1], Loss: 0.7961, Acc: 0.9987, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.74
+Test [161/250]	Acc: 0.9812, Bal Acc: 0.9693
+it: [10/37-162/250], rank: [1/1], Loss: 0.7963, Loss avg: 0.7976, lr: 0.028216, BT: 0.87, DT: 0.00
+it: [20/37-162/250], rank: [1/1], Loss: 0.7908, Loss avg: 0.7949, lr: 0.028216, BT: 0.87, DT: 0.00
+it: [30/37-162/250], rank: [1/1], Loss: 0.7933, Loss avg: 0.7954, lr: 0.028216, BT: 0.87, DT: 0.00
+Train [162/250]	rank: [1/1], Loss: 0.7959, Acc: 0.9979, Bal Acc: 0.9943, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [162/250]	Acc: 0.9750, Bal Acc: 0.9577
+it: [10/37-163/250], rank: [1/1], Loss: 0.8054, Loss avg: 0.7982, lr: 0.027653, BT: 0.86, DT: 0.00
+it: [20/37-163/250], rank: [1/1], Loss: 0.7988, Loss avg: 0.7958, lr: 0.027653, BT: 0.87, DT: 0.00
+it: [30/37-163/250], rank: [1/1], Loss: 0.7910, Loss avg: 0.7964, lr: 0.027653, BT: 0.87, DT: 0.00
+Train [163/250]	rank: [1/1], Loss: 0.7965, Acc: 0.9979, Bal Acc: 0.9925, BT: 0.89, DT: 0.03,  epoch time: 32.91
+Test [163/250]	Acc: 0.9812, Bal Acc: 0.9784
+it: [10/37-164/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7916, lr: 0.027094, BT: 0.86, DT: 0.00
+it: [20/37-164/250], rank: [1/1], Loss: 0.7905, Loss avg: 0.7947, lr: 0.027094, BT: 0.87, DT: 0.00
+it: [30/37-164/250], rank: [1/1], Loss: 0.7882, Loss avg: 0.7964, lr: 0.027094, BT: 0.87, DT: 0.00
+Train [164/250]	rank: [1/1], Loss: 0.7986, Acc: 0.9975, Bal Acc: 0.9926, BT: 0.88, DT: 0.02,  epoch time: 32.61
+Test [164/250]	Acc: 0.9812, Bal Acc: 0.9715
+it: [10/37-165/250], rank: [1/1], Loss: 0.7946, Loss avg: 0.7947, lr: 0.026538, BT: 0.87, DT: 0.00
+it: [20/37-165/250], rank: [1/1], Loss: 0.8041, Loss avg: 0.7968, lr: 0.026538, BT: 0.87, DT: 0.01
+it: [30/37-165/250], rank: [1/1], Loss: 0.8012, Loss avg: 0.7969, lr: 0.026538, BT: 0.87, DT: 0.00
+Train [165/250]	rank: [1/1], Loss: 0.7968, Acc: 0.9987, Bal Acc: 0.9978, BT: 0.88, DT: 0.02,  epoch time: 32.56
+Test [165/250]	Acc: 0.9781, Bal Acc: 0.9587
+it: [10/37-166/250], rank: [1/1], Loss: 0.7944, Loss avg: 0.7959, lr: 0.025986, BT: 0.87, DT: 0.00
+it: [20/37-166/250], rank: [1/1], Loss: 0.7905, Loss avg: 0.7972, lr: 0.025986, BT: 0.87, DT: 0.00
+it: [30/37-166/250], rank: [1/1], Loss: 0.8032, Loss avg: 0.7983, lr: 0.025986, BT: 0.87, DT: 0.00
+Train [166/250]	rank: [1/1], Loss: 0.7983, Acc: 0.9970, Bal Acc: 0.9936, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [166/250]	Acc: 0.9875, Bal Acc: 0.9916
+it: [10/37-167/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7996, lr: 0.025438, BT: 0.87, DT: 0.01
+it: [20/37-167/250], rank: [1/1], Loss: 0.7946, Loss avg: 0.7974, lr: 0.025438, BT: 0.87, DT: 0.00
+it: [30/37-167/250], rank: [1/1], Loss: 0.8022, Loss avg: 0.7975, lr: 0.025438, BT: 0.86, DT: 0.00
+Train [167/250]	rank: [1/1], Loss: 0.7973, Acc: 0.9975, Bal Acc: 0.9913, BT: 0.88, DT: 0.01,  epoch time: 32.52
+Test [167/250]	Acc: 0.9812, Bal Acc: 0.9714
+it: [10/37-168/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7945, lr: 0.024894, BT: 0.87, DT: 0.00
+it: [20/37-168/250], rank: [1/1], Loss: 0.7899, Loss avg: 0.7934, lr: 0.024894, BT: 0.86, DT: 0.00
+it: [30/37-168/250], rank: [1/1], Loss: 0.7916, Loss avg: 0.7937, lr: 0.024894, BT: 0.86, DT: 0.00
+Train [168/250]	rank: [1/1], Loss: 0.7942, Acc: 0.9987, Bal Acc: 0.9977, BT: 0.88, DT: 0.01,  epoch time: 32.47
+Test [168/250]	Acc: 0.9781, Bal Acc: 0.9694
+it: [10/37-169/250], rank: [1/1], Loss: 0.7920, Loss avg: 0.7956, lr: 0.024354, BT: 0.86, DT: 0.00
+it: [20/37-169/250], rank: [1/1], Loss: 0.8300, Loss avg: 0.7960, lr: 0.024354, BT: 0.86, DT: 0.00
+it: [30/37-169/250], rank: [1/1], Loss: 0.7956, Loss avg: 0.7962, lr: 0.024354, BT: 0.87, DT: 0.00
+Train [169/250]	rank: [1/1], Loss: 0.7957, Acc: 0.9987, Bal Acc: 0.9966, BT: 0.89, DT: 0.03,  epoch time: 32.89
+Test [169/250]	Acc: 0.9812, Bal Acc: 0.9704
+it: [10/37-170/250], rank: [1/1], Loss: 0.8032, Loss avg: 0.7962, lr: 0.023818, BT: 0.86, DT: 0.00
+it: [20/37-170/250], rank: [1/1], Loss: 0.7908, Loss avg: 0.7983, lr: 0.023818, BT: 0.87, DT: 0.01
+it: [30/37-170/250], rank: [1/1], Loss: 0.8027, Loss avg: 0.7973, lr: 0.023818, BT: 0.87, DT: 0.00
+Train [170/250]	rank: [1/1], Loss: 0.7969, Acc: 0.9975, Bal Acc: 0.9936, BT: 0.88, DT: 0.02,  epoch time: 32.62
+Test [170/250]	Acc: 0.9781, Bal Acc: 0.9693
+it: [10/37-171/250], rank: [1/1], Loss: 0.7891, Loss avg: 0.7976, lr: 0.023285, BT: 0.87, DT: 0.00
+it: [20/37-171/250], rank: [1/1], Loss: 0.7891, Loss avg: 0.7961, lr: 0.023285, BT: 0.86, DT: 0.00
+it: [30/37-171/250], rank: [1/1], Loss: 0.7930, Loss avg: 0.7962, lr: 0.023285, BT: 0.87, DT: 0.00
+Train [171/250]	rank: [1/1], Loss: 0.7956, Acc: 0.9987, Bal Acc: 0.9977, BT: 0.88, DT: 0.02,  epoch time: 32.59
+Test [171/250]	Acc: 0.9781, Bal Acc: 0.9695
+it: [10/37-172/250], rank: [1/1], Loss: 0.7977, Loss avg: 0.7974, lr: 0.022758, BT: 0.87, DT: 0.00
+it: [20/37-172/250], rank: [1/1], Loss: 0.7928, Loss avg: 0.7942, lr: 0.022758, BT: 0.87, DT: 0.00
+it: [30/37-172/250], rank: [1/1], Loss: 0.7899, Loss avg: 0.7946, lr: 0.022758, BT: 0.87, DT: 0.00
+Train [172/250]	rank: [1/1], Loss: 0.7941, Acc: 0.9987, Bal Acc: 0.9947, BT: 0.88, DT: 0.02,  epoch time: 32.56
+Test [172/250]	Acc: 0.9844, Bal Acc: 0.9814
+it: [10/37-173/250], rank: [1/1], Loss: 0.8141, Loss avg: 0.7970, lr: 0.022234, BT: 0.87, DT: 0.01
+it: [20/37-173/250], rank: [1/1], Loss: 0.7956, Loss avg: 0.7963, lr: 0.022234, BT: 0.86, DT: 0.00
+it: [30/37-173/250], rank: [1/1], Loss: 0.7951, Loss avg: 0.7965, lr: 0.022234, BT: 0.86, DT: 0.00
+Train [173/250]	rank: [1/1], Loss: 0.7957, Acc: 0.9987, Bal Acc: 0.9965, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [173/250]	Acc: 0.9844, Bal Acc: 0.9809
+it: [10/37-174/250], rank: [1/1], Loss: 0.8079, Loss avg: 0.7959, lr: 0.021715, BT: 0.86, DT: 0.00
+it: [20/37-174/250], rank: [1/1], Loss: 0.7969, Loss avg: 0.7968, lr: 0.021715, BT: 0.87, DT: 0.00
+it: [30/37-174/250], rank: [1/1], Loss: 0.8041, Loss avg: 0.7970, lr: 0.021715, BT: 0.87, DT: 0.00
+Train [174/250]	rank: [1/1], Loss: 0.7961, Acc: 0.9996, Bal Acc: 0.9998, BT: 0.88, DT: 0.02,  epoch time: 32.59
+Test [174/250]	Acc: 0.9812, Bal Acc: 0.9790
+it: [10/37-175/250], rank: [1/1], Loss: 0.7920, Loss avg: 0.7933, lr: 0.021200, BT: 0.87, DT: 0.00
+it: [20/37-175/250], rank: [1/1], Loss: 0.7950, Loss avg: 0.7989, lr: 0.021200, BT: 0.86, DT: 0.00
+it: [30/37-175/250], rank: [1/1], Loss: 0.8122, Loss avg: 0.7973, lr: 0.021200, BT: 0.87, DT: 0.00
+Train [175/250]	rank: [1/1], Loss: 0.7982, Acc: 0.9975, Bal Acc: 0.9970, BT: 0.89, DT: 0.02,  epoch time: 32.90
+Test [175/250]	Acc: 0.9812, Bal Acc: 0.9714
+it: [10/37-176/250], rank: [1/1], Loss: 0.7934, Loss avg: 0.7953, lr: 0.020690, BT: 0.87, DT: 0.00
+it: [20/37-176/250], rank: [1/1], Loss: 0.7947, Loss avg: 0.7947, lr: 0.020690, BT: 0.87, DT: 0.00
+it: [30/37-176/250], rank: [1/1], Loss: 0.8055, Loss avg: 0.7954, lr: 0.020690, BT: 0.87, DT: 0.00
+Train [176/250]	rank: [1/1], Loss: 0.7958, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [176/250]	Acc: 0.9812, Bal Acc: 0.9636
+it: [10/37-177/250], rank: [1/1], Loss: 0.7918, Loss avg: 0.7921, lr: 0.020185, BT: 0.86, DT: 0.00
+it: [20/37-177/250], rank: [1/1], Loss: 0.7930, Loss avg: 0.7947, lr: 0.020185, BT: 0.87, DT: 0.00
+it: [30/37-177/250], rank: [1/1], Loss: 0.7981, Loss avg: 0.7959, lr: 0.020185, BT: 0.87, DT: 0.00
+Train [177/250]	rank: [1/1], Loss: 0.7959, Acc: 0.9979, Bal Acc: 0.9944, BT: 0.88, DT: 0.02,  epoch time: 32.61
+Test [177/250]	Acc: 0.9875, Bal Acc: 0.9826
+it: [10/37-178/250], rank: [1/1], Loss: 0.7875, Loss avg: 0.7943, lr: 0.019684, BT: 0.86, DT: 0.00
+it: [20/37-178/250], rank: [1/1], Loss: 0.7914, Loss avg: 0.7945, lr: 0.019684, BT: 0.86, DT: 0.00
+it: [30/37-178/250], rank: [1/1], Loss: 0.8126, Loss avg: 0.7961, lr: 0.019684, BT: 0.86, DT: 0.00
+Train [178/250]	rank: [1/1], Loss: 0.7960, Acc: 0.9983, Bal Acc: 0.9963, BT: 0.88, DT: 0.02,  epoch time: 32.51
+Test [178/250]	Acc: 0.9781, Bal Acc: 0.9694
+it: [10/37-179/250], rank: [1/1], Loss: 0.7890, Loss avg: 0.7972, lr: 0.019188, BT: 0.88, DT: 0.02
+it: [20/37-179/250], rank: [1/1], Loss: 0.7898, Loss avg: 0.7954, lr: 0.019188, BT: 0.87, DT: 0.00
+it: [30/37-179/250], rank: [1/1], Loss: 0.7974, Loss avg: 0.7953, lr: 0.019188, BT: 0.87, DT: 0.00
+Train [179/250]	rank: [1/1], Loss: 0.7957, Acc: 0.9975, Bal Acc: 0.9940, BT: 0.88, DT: 0.02,  epoch time: 32.74
+Test [179/250]	Acc: 0.9844, Bal Acc: 0.9797
+it: [10/37-180/250], rank: [1/1], Loss: 0.8086, Loss avg: 0.7987, lr: 0.018697, BT: 0.87, DT: 0.00
+it: [20/37-180/250], rank: [1/1], Loss: 0.7909, Loss avg: 0.7965, lr: 0.018697, BT: 0.86, DT: 0.00
+it: [30/37-180/250], rank: [1/1], Loss: 0.7960, Loss avg: 0.7968, lr: 0.018697, BT: 0.86, DT: 0.00
+Train [180/250]	rank: [1/1], Loss: 0.7969, Acc: 0.9975, Bal Acc: 0.9912, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [180/250]	Acc: 0.9844, Bal Acc: 0.9814
+it: [10/37-181/250], rank: [1/1], Loss: 0.7906, Loss avg: 0.7944, lr: 0.018211, BT: 0.87, DT: 0.00
+it: [20/37-181/250], rank: [1/1], Loss: 0.7916, Loss avg: 0.7957, lr: 0.018211, BT: 0.86, DT: 0.00
+it: [30/37-181/250], rank: [1/1], Loss: 0.7938, Loss avg: 0.7956, lr: 0.018211, BT: 0.86, DT: 0.00
+Train [181/250]	rank: [1/1], Loss: 0.7954, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.02,  epoch time: 32.69
+Test [181/250]	Acc: 0.9812, Bal Acc: 0.9714
+it: [10/37-182/250], rank: [1/1], Loss: 0.7870, Loss avg: 0.7934, lr: 0.017730, BT: 0.86, DT: 0.00
+it: [20/37-182/250], rank: [1/1], Loss: 0.7860, Loss avg: 0.7934, lr: 0.017730, BT: 0.87, DT: 0.00
+it: [30/37-182/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.7938, lr: 0.017730, BT: 0.86, DT: 0.00
+Train [182/250]	rank: [1/1], Loss: 0.7936, Acc: 0.9992, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.65
+Test [182/250]	Acc: 0.9812, Bal Acc: 0.9704
+it: [10/37-183/250], rank: [1/1], Loss: 0.7884, Loss avg: 0.7930, lr: 0.017254, BT: 0.87, DT: 0.00
+it: [20/37-183/250], rank: [1/1], Loss: 0.7905, Loss avg: 0.7936, lr: 0.017254, BT: 0.87, DT: 0.00
+it: [30/37-183/250], rank: [1/1], Loss: 0.7890, Loss avg: 0.7953, lr: 0.017254, BT: 0.86, DT: 0.00
+Train [183/250]	rank: [1/1], Loss: 0.7958, Acc: 0.9979, Bal Acc: 0.9943, BT: 0.88, DT: 0.01,  epoch time: 32.54
+Test [183/250]	Acc: 0.9812, Bal Acc: 0.9789
+it: [10/37-184/250], rank: [1/1], Loss: 0.8022, Loss avg: 0.7930, lr: 0.016783, BT: 0.86, DT: 0.00
+it: [20/37-184/250], rank: [1/1], Loss: 0.7885, Loss avg: 0.7955, lr: 0.016783, BT: 0.86, DT: 0.00
+it: [30/37-184/250], rank: [1/1], Loss: 0.7865, Loss avg: 0.7950, lr: 0.016783, BT: 0.86, DT: 0.00
+Train [184/250]	rank: [1/1], Loss: 0.7958, Acc: 0.9992, Bal Acc: 0.9963, BT: 0.88, DT: 0.02,  epoch time: 32.64
+Test [184/250]	Acc: 0.9812, Bal Acc: 0.9680
+it: [10/37-185/250], rank: [1/1], Loss: 0.7888, Loss avg: 0.7935, lr: 0.016317, BT: 0.86, DT: 0.00
+it: [20/37-185/250], rank: [1/1], Loss: 0.7895, Loss avg: 0.7941, lr: 0.016317, BT: 0.86, DT: 0.00
+it: [30/37-185/250], rank: [1/1], Loss: 0.7917, Loss avg: 0.7947, lr: 0.016317, BT: 0.86, DT: 0.00
+Train [185/250]	rank: [1/1], Loss: 0.7949, Acc: 0.9987, Bal Acc: 0.9976, BT: 0.88, DT: 0.02,  epoch time: 32.56
+Test [185/250]	Acc: 0.9812, Bal Acc: 0.9693
+it: [10/37-186/250], rank: [1/1], Loss: 0.7972, Loss avg: 0.7965, lr: 0.015857, BT: 0.86, DT: 0.00
+it: [20/37-186/250], rank: [1/1], Loss: 0.8023, Loss avg: 0.7953, lr: 0.015857, BT: 0.86, DT: 0.00
+it: [30/37-186/250], rank: [1/1], Loss: 0.7911, Loss avg: 0.7946, lr: 0.015857, BT: 0.86, DT: 0.00
+Train [186/250]	rank: [1/1], Loss: 0.7946, Acc: 0.9987, Bal Acc: 0.9962, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [186/250]	Acc: 0.9812, Bal Acc: 0.9705
+it: [10/37-187/250], rank: [1/1], Loss: 0.7919, Loss avg: 0.7951, lr: 0.015402, BT: 0.87, DT: 0.00
+it: [20/37-187/250], rank: [1/1], Loss: 0.7995, Loss avg: 0.7952, lr: 0.015402, BT: 0.86, DT: 0.00
+it: [30/37-187/250], rank: [1/1], Loss: 0.8060, Loss avg: 0.7955, lr: 0.015402, BT: 0.87, DT: 0.00
+Train [187/250]	rank: [1/1], Loss: 0.7950, Acc: 0.9992, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.75
+Test [187/250]	Acc: 0.9781, Bal Acc: 0.9659
+it: [10/37-188/250], rank: [1/1], Loss: 0.7935, Loss avg: 0.7934, lr: 0.014953, BT: 0.86, DT: 0.00
+it: [20/37-188/250], rank: [1/1], Loss: 0.7982, Loss avg: 0.7933, lr: 0.014953, BT: 0.87, DT: 0.00
+it: [30/37-188/250], rank: [1/1], Loss: 0.7887, Loss avg: 0.7938, lr: 0.014953, BT: 0.86, DT: 0.00
+Train [188/250]	rank: [1/1], Loss: 0.7936, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.02,  epoch time: 32.52
+Test [188/250]	Acc: 0.9812, Bal Acc: 0.9714
+it: [10/37-189/250], rank: [1/1], Loss: 0.7898, Loss avg: 0.7954, lr: 0.014509, BT: 0.86, DT: 0.00
+it: [20/37-189/250], rank: [1/1], Loss: 0.7911, Loss avg: 0.7944, lr: 0.014509, BT: 0.87, DT: 0.01
+it: [30/37-189/250], rank: [1/1], Loss: 0.7882, Loss avg: 0.7948, lr: 0.014509, BT: 0.87, DT: 0.00
+Train [189/250]	rank: [1/1], Loss: 0.7943, Acc: 0.9996, Bal Acc: 0.9996, BT: 0.88, DT: 0.02,  epoch time: 32.59
+Test [189/250]	Acc: 0.9812, Bal Acc: 0.9704
+it: [10/37-190/250], rank: [1/1], Loss: 0.7966, Loss avg: 0.7956, lr: 0.014071, BT: 0.86, DT: 0.00
+it: [20/37-190/250], rank: [1/1], Loss: 0.7899, Loss avg: 0.7958, lr: 0.014071, BT: 0.87, DT: 0.00
+it: [30/37-190/250], rank: [1/1], Loss: 0.7891, Loss avg: 0.7979, lr: 0.014071, BT: 0.87, DT: 0.00
+Train [190/250]	rank: [1/1], Loss: 0.7975, Acc: 0.9987, Bal Acc: 0.9992, BT: 0.88, DT: 0.01,  epoch time: 32.50
+Test [190/250]	Acc: 0.9781, Bal Acc: 0.9684
+it: [10/37-191/250], rank: [1/1], Loss: 0.7886, Loss avg: 0.7919, lr: 0.013638, BT: 0.87, DT: 0.01
+it: [20/37-191/250], rank: [1/1], Loss: 0.7991, Loss avg: 0.7933, lr: 0.013638, BT: 0.87, DT: 0.00
+it: [30/37-191/250], rank: [1/1], Loss: 0.8114, Loss avg: 0.7942, lr: 0.013638, BT: 0.87, DT: 0.00
+Train [191/250]	rank: [1/1], Loss: 0.7953, Acc: 0.9987, Bal Acc: 0.9962, BT: 0.88, DT: 0.01,  epoch time: 32.54
+Test [191/250]	Acc: 0.9750, Bal Acc: 0.9661
+it: [10/37-192/250], rank: [1/1], Loss: 0.7971, Loss avg: 0.7956, lr: 0.013211, BT: 0.87, DT: 0.00
+it: [20/37-192/250], rank: [1/1], Loss: 0.8021, Loss avg: 0.7969, lr: 0.013211, BT: 0.87, DT: 0.00
+it: [30/37-192/250], rank: [1/1], Loss: 0.7984, Loss avg: 0.7962, lr: 0.013211, BT: 0.87, DT: 0.00
+Train [192/250]	rank: [1/1], Loss: 0.7953, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [192/250]	Acc: 0.9781, Bal Acc: 0.9683
+it: [10/37-193/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7968, lr: 0.012790, BT: 0.87, DT: 0.00
+it: [20/37-193/250], rank: [1/1], Loss: 0.7883, Loss avg: 0.7950, lr: 0.012790, BT: 0.87, DT: 0.00
+it: [30/37-193/250], rank: [1/1], Loss: 0.7921, Loss avg: 0.7949, lr: 0.012790, BT: 0.86, DT: 0.00
+Train [193/250]	rank: [1/1], Loss: 0.7940, Acc: 0.9992, Bal Acc: 0.9966, BT: 0.89, DT: 0.03,  epoch time: 33.07
+Test [193/250]	Acc: 0.9812, Bal Acc: 0.9705
+it: [10/37-194/250], rank: [1/1], Loss: 0.8114, Loss avg: 0.7951, lr: 0.012375, BT: 0.86, DT: 0.00
+it: [20/37-194/250], rank: [1/1], Loss: 0.7992, Loss avg: 0.7954, lr: 0.012375, BT: 0.87, DT: 0.00
+it: [30/37-194/250], rank: [1/1], Loss: 0.8077, Loss avg: 0.7952, lr: 0.012375, BT: 0.86, DT: 0.00
+Train [194/250]	rank: [1/1], Loss: 0.7953, Acc: 0.9992, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [194/250]	Acc: 0.9906, Bal Acc: 0.9833
+it: [10/37-195/250], rank: [1/1], Loss: 0.8168, Loss avg: 0.7976, lr: 0.011966, BT: 0.87, DT: 0.00
+it: [20/37-195/250], rank: [1/1], Loss: 0.7934, Loss avg: 0.7959, lr: 0.011966, BT: 0.87, DT: 0.00
+it: [30/37-195/250], rank: [1/1], Loss: 0.7948, Loss avg: 0.7957, lr: 0.011966, BT: 0.86, DT: 0.00
+Train [195/250]	rank: [1/1], Loss: 0.7952, Acc: 0.9987, Bal Acc: 0.9978, BT: 0.88, DT: 0.02,  epoch time: 32.49
+Test [195/250]	Acc: 0.9812, Bal Acc: 0.9714
+it: [10/37-196/250], rank: [1/1], Loss: 0.7900, Loss avg: 0.7920, lr: 0.011563, BT: 0.87, DT: 0.00
+it: [20/37-196/250], rank: [1/1], Loss: 0.7946, Loss avg: 0.7927, lr: 0.011563, BT: 0.86, DT: 0.00
+it: [30/37-196/250], rank: [1/1], Loss: 0.7963, Loss avg: 0.7949, lr: 0.011563, BT: 0.86, DT: 0.00
+Train [196/250]	rank: [1/1], Loss: 0.7962, Acc: 0.9975, Bal Acc: 0.9966, BT: 0.87, DT: 0.01,  epoch time: 32.45
+Test [196/250]	Acc: 0.9844, Bal Acc: 0.9725
+it: [10/37-197/250], rank: [1/1], Loss: 0.7887, Loss avg: 0.7929, lr: 0.011166, BT: 0.86, DT: 0.01
+it: [20/37-197/250], rank: [1/1], Loss: 0.7900, Loss avg: 0.7938, lr: 0.011166, BT: 0.87, DT: 0.00
+it: [30/37-197/250], rank: [1/1], Loss: 0.7904, Loss avg: 0.7943, lr: 0.011166, BT: 0.87, DT: 0.00
+Train [197/250]	rank: [1/1], Loss: 0.7942, Acc: 0.9987, Bal Acc: 0.9947, BT: 0.88, DT: 0.02,  epoch time: 32.71
+Test [197/250]	Acc: 0.9781, Bal Acc: 0.9600
+it: [10/37-198/250], rank: [1/1], Loss: 0.8179, Loss avg: 0.7937, lr: 0.010775, BT: 0.87, DT: 0.00
+it: [20/37-198/250], rank: [1/1], Loss: 0.7988, Loss avg: 0.7932, lr: 0.010775, BT: 0.87, DT: 0.00
+it: [30/37-198/250], rank: [1/1], Loss: 0.7929, Loss avg: 0.7925, lr: 0.010775, BT: 0.86, DT: 0.00
+Train [198/250]	rank: [1/1], Loss: 0.7932, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.69
+Test [198/250]	Acc: 0.9812, Bal Acc: 0.9692
+it: [10/37-199/250], rank: [1/1], Loss: 0.7971, Loss avg: 0.7948, lr: 0.010390, BT: 0.87, DT: 0.00
+it: [20/37-199/250], rank: [1/1], Loss: 0.7897, Loss avg: 0.7940, lr: 0.010390, BT: 0.87, DT: 0.00
+it: [30/37-199/250], rank: [1/1], Loss: 0.8044, Loss avg: 0.7938, lr: 0.010390, BT: 0.86, DT: 0.00
+Train [199/250]	rank: [1/1], Loss: 0.7932, Acc: 0.9996, Bal Acc: 0.9982, BT: 0.89, DT: 0.03,  epoch time: 32.99
+Test [199/250]	Acc: 0.9812, Bal Acc: 0.9681
+it: [10/37-200/250], rank: [1/1], Loss: 0.7996, Loss avg: 0.7944, lr: 0.010012, BT: 0.86, DT: 0.00
+it: [20/37-200/250], rank: [1/1], Loss: 0.7900, Loss avg: 0.7934, lr: 0.010012, BT: 0.87, DT: 0.00
+it: [30/37-200/250], rank: [1/1], Loss: 0.8312, Loss avg: 0.7941, lr: 0.010012, BT: 0.86, DT: 0.00
+Train [200/250]	rank: [1/1], Loss: 0.7939, Acc: 0.9987, Bal Acc: 0.9977, BT: 0.88, DT: 0.02,  epoch time: 32.50
+Test [200/250]	Acc: 0.9781, Bal Acc: 0.9683
+it: [10/37-201/250], rank: [1/1], Loss: 0.7880, Loss avg: 0.7948, lr: 0.009640, BT: 0.87, DT: 0.00
+it: [20/37-201/250], rank: [1/1], Loss: 0.7911, Loss avg: 0.7932, lr: 0.009640, BT: 0.86, DT: 0.00
+it: [30/37-201/250], rank: [1/1], Loss: 0.7980, Loss avg: 0.7947, lr: 0.009640, BT: 0.86, DT: 0.00
+Train [201/250]	rank: [1/1], Loss: 0.7947, Acc: 0.9979, Bal Acc: 0.9931, BT: 0.88, DT: 0.02,  epoch time: 32.61
+Test [201/250]	Acc: 0.9844, Bal Acc: 0.9735
+it: [10/37-202/250], rank: [1/1], Loss: 0.7977, Loss avg: 0.7948, lr: 0.009274, BT: 0.87, DT: 0.00
+it: [20/37-202/250], rank: [1/1], Loss: 0.7869, Loss avg: 0.7950, lr: 0.009274, BT: 0.86, DT: 0.00
+it: [30/37-202/250], rank: [1/1], Loss: 0.7993, Loss avg: 0.7941, lr: 0.009274, BT: 0.86, DT: 0.00
+Train [202/250]	rank: [1/1], Loss: 0.7946, Acc: 0.9987, Bal Acc: 0.9962, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [202/250]	Acc: 0.9781, Bal Acc: 0.9693
+it: [10/37-203/250], rank: [1/1], Loss: 0.7897, Loss avg: 0.7934, lr: 0.008915, BT: 0.87, DT: 0.01
+it: [20/37-203/250], rank: [1/1], Loss: 0.7930, Loss avg: 0.7935, lr: 0.008915, BT: 0.86, DT: 0.00
+it: [30/37-203/250], rank: [1/1], Loss: 0.7924, Loss avg: 0.7931, lr: 0.008915, BT: 0.86, DT: 0.00
+Train [203/250]	rank: [1/1], Loss: 0.7944, Acc: 1.0000, Bal Acc: 1.0000, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [203/250]	Acc: 0.9781, Bal Acc: 0.9684
+it: [10/37-204/250], rank: [1/1], Loss: 0.7883, Loss avg: 0.7946, lr: 0.008562, BT: 0.86, DT: 0.00
+it: [20/37-204/250], rank: [1/1], Loss: 0.7912, Loss avg: 0.7937, lr: 0.008562, BT: 0.86, DT: 0.00
+it: [30/37-204/250], rank: [1/1], Loss: 0.7923, Loss avg: 0.7950, lr: 0.008562, BT: 0.86, DT: 0.00
+Train [204/250]	rank: [1/1], Loss: 0.7956, Acc: 0.9987, Bal Acc: 0.9963, BT: 0.88, DT: 0.02,  epoch time: 32.56
+Test [204/250]	Acc: 0.9875, Bal Acc: 0.9825
+it: [10/37-205/250], rank: [1/1], Loss: 0.7958, Loss avg: 0.7919, lr: 0.008215, BT: 0.87, DT: 0.00
+it: [20/37-205/250], rank: [1/1], Loss: 0.7918, Loss avg: 0.7929, lr: 0.008215, BT: 0.86, DT: 0.00
+it: [30/37-205/250], rank: [1/1], Loss: 0.8010, Loss avg: 0.7934, lr: 0.008215, BT: 0.86, DT: 0.00
+Train [205/250]	rank: [1/1], Loss: 0.7942, Acc: 0.9992, Bal Acc: 0.9994, BT: 0.89, DT: 0.03,  epoch time: 33.01
+Test [205/250]	Acc: 0.9812, Bal Acc: 0.9693
+it: [10/37-206/250], rank: [1/1], Loss: 0.7924, Loss avg: 0.7919, lr: 0.007876, BT: 0.87, DT: 0.00
+it: [20/37-206/250], rank: [1/1], Loss: 0.7922, Loss avg: 0.7929, lr: 0.007876, BT: 0.86, DT: 0.00
+it: [30/37-206/250], rank: [1/1], Loss: 0.7897, Loss avg: 0.7931, lr: 0.007876, BT: 0.87, DT: 0.00
+Train [206/250]	rank: [1/1], Loss: 0.7932, Acc: 0.9987, Bal Acc: 0.9965, BT: 0.88, DT: 0.01,  epoch time: 32.46
+Test [206/250]	Acc: 0.9812, Bal Acc: 0.9788
+it: [10/37-207/250], rank: [1/1], Loss: 0.7896, Loss avg: 0.7914, lr: 0.007543, BT: 0.87, DT: 0.00
+it: [20/37-207/250], rank: [1/1], Loss: 0.7959, Loss avg: 0.7944, lr: 0.007543, BT: 0.87, DT: 0.00
+it: [30/37-207/250], rank: [1/1], Loss: 0.7905, Loss avg: 0.7935, lr: 0.007543, BT: 0.87, DT: 0.00
+Train [207/250]	rank: [1/1], Loss: 0.7941, Acc: 0.9979, Bal Acc: 0.9959, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [207/250]	Acc: 0.9844, Bal Acc: 0.9725
+it: [10/37-208/250], rank: [1/1], Loss: 0.7912, Loss avg: 0.7936, lr: 0.007217, BT: 0.86, DT: 0.00
+it: [20/37-208/250], rank: [1/1], Loss: 0.7956, Loss avg: 0.7941, lr: 0.007217, BT: 0.87, DT: 0.00
+it: [30/37-208/250], rank: [1/1], Loss: 0.7977, Loss avg: 0.7930, lr: 0.007217, BT: 0.87, DT: 0.00
+Train [208/250]	rank: [1/1], Loss: 0.7938, Acc: 1.0000, Bal Acc: 1.0000, BT: 0.88, DT: 0.02,  epoch time: 32.58
+Test [208/250]	Acc: 0.9781, Bal Acc: 0.9671
+it: [10/37-209/250], rank: [1/1], Loss: 0.7942, Loss avg: 0.7938, lr: 0.006897, BT: 0.86, DT: 0.00
+it: [20/37-209/250], rank: [1/1], Loss: 0.7965, Loss avg: 0.7945, lr: 0.006897, BT: 0.86, DT: 0.00
+it: [30/37-209/250], rank: [1/1], Loss: 0.7865, Loss avg: 0.7929, lr: 0.006897, BT: 0.86, DT: 0.00
+Train [209/250]	rank: [1/1], Loss: 0.7926, Acc: 0.9996, Bal Acc: 0.9982, BT: 0.88, DT: 0.02,  epoch time: 32.55
+Test [209/250]	Acc: 0.9812, Bal Acc: 0.9705
+it: [10/37-210/250], rank: [1/1], Loss: 0.7881, Loss avg: 0.7925, lr: 0.006584, BT: 0.86, DT: 0.00
+it: [20/37-210/250], rank: [1/1], Loss: 0.7871, Loss avg: 0.7949, lr: 0.006584, BT: 0.87, DT: 0.00
+it: [30/37-210/250], rank: [1/1], Loss: 0.7984, Loss avg: 0.7950, lr: 0.006584, BT: 0.87, DT: 0.00
+Train [210/250]	rank: [1/1], Loss: 0.7950, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.02,  epoch time: 32.57
+Test [210/250]	Acc: 0.9844, Bal Acc: 0.9806
+it: [10/37-211/250], rank: [1/1], Loss: 0.7973, Loss avg: 0.7943, lr: 0.006278, BT: 0.86, DT: 0.00
+it: [20/37-211/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.7927, lr: 0.006278, BT: 0.86, DT: 0.00
+it: [30/37-211/250], rank: [1/1], Loss: 0.7940, Loss avg: 0.7926, lr: 0.006278, BT: 0.87, DT: 0.00
+Train [211/250]	rank: [1/1], Loss: 0.7935, Acc: 1.0000, Bal Acc: 1.0000, BT: 0.89, DT: 0.03,  epoch time: 32.97
+Test [211/250]	Acc: 0.9812, Bal Acc: 0.9715
+it: [10/37-212/250], rank: [1/1], Loss: 0.7934, Loss avg: 0.7914, lr: 0.005980, BT: 0.87, DT: 0.00
+it: [20/37-212/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.7908, lr: 0.005980, BT: 0.86, DT: 0.00
+it: [30/37-212/250], rank: [1/1], Loss: 0.8002, Loss avg: 0.7913, lr: 0.005980, BT: 0.87, DT: 0.00
+Train [212/250]	rank: [1/1], Loss: 0.7919, Acc: 0.9996, Bal Acc: 0.9982, BT: 0.88, DT: 0.02,  epoch time: 32.59
+Test [212/250]	Acc: 0.9750, Bal Acc: 0.9649
+it: [10/37-213/250], rank: [1/1], Loss: 0.7906, Loss avg: 0.7929, lr: 0.005688, BT: 0.87, DT: 0.00
+it: [20/37-213/250], rank: [1/1], Loss: 0.7891, Loss avg: 0.7939, lr: 0.005688, BT: 0.87, DT: 0.01
+it: [30/37-213/250], rank: [1/1], Loss: 0.7908, Loss avg: 0.7932, lr: 0.005688, BT: 0.86, DT: 0.00
+Train [213/250]	rank: [1/1], Loss: 0.7934, Acc: 1.0000, Bal Acc: 1.0000, BT: 0.88, DT: 0.01,  epoch time: 32.47
+Test [213/250]	Acc: 0.9781, Bal Acc: 0.9684
+it: [10/37-214/250], rank: [1/1], Loss: 0.7906, Loss avg: 0.7932, lr: 0.005403, BT: 0.86, DT: 0.00
+it: [20/37-214/250], rank: [1/1], Loss: 0.7914, Loss avg: 0.7929, lr: 0.005403, BT: 0.86, DT: 0.00
+it: [30/37-214/250], rank: [1/1], Loss: 0.7933, Loss avg: 0.7937, lr: 0.005403, BT: 0.86, DT: 0.00
+Train [214/250]	rank: [1/1], Loss: 0.7946, Acc: 0.9996, Bal Acc: 0.9982, BT: 0.88, DT: 0.02,  epoch time: 32.51
+Test [214/250]	Acc: 0.9781, Bal Acc: 0.9680
+it: [10/37-215/250], rank: [1/1], Loss: 0.7871, Loss avg: 0.7940, lr: 0.005125, BT: 0.86, DT: 0.01
+it: [20/37-215/250], rank: [1/1], Loss: 0.7897, Loss avg: 0.7919, lr: 0.005125, BT: 0.86, DT: 0.00
+it: [30/37-215/250], rank: [1/1], Loss: 0.7881, Loss avg: 0.7934, lr: 0.005125, BT: 0.86, DT: 0.00
+Train [215/250]	rank: [1/1], Loss: 0.7931, Acc: 0.9992, Bal Acc: 0.9982, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [215/250]	Acc: 0.9875, Bal Acc: 0.9830
+it: [10/37-216/250], rank: [1/1], Loss: 0.7888, Loss avg: 0.7928, lr: 0.004854, BT: 0.86, DT: 0.00
+it: [20/37-216/250], rank: [1/1], Loss: 0.7945, Loss avg: 0.7941, lr: 0.004854, BT: 0.87, DT: 0.00
+it: [30/37-216/250], rank: [1/1], Loss: 0.7944, Loss avg: 0.7942, lr: 0.004854, BT: 0.87, DT: 0.00
+Train [216/250]	rank: [1/1], Loss: 0.7946, Acc: 0.9987, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [216/250]	Acc: 0.9875, Bal Acc: 0.9825
+it: [10/37-217/250], rank: [1/1], Loss: 0.7877, Loss avg: 0.7943, lr: 0.004590, BT: 0.87, DT: 0.00
+it: [20/37-217/250], rank: [1/1], Loss: 0.7889, Loss avg: 0.7941, lr: 0.004590, BT: 0.86, DT: 0.00
+it: [30/37-217/250], rank: [1/1], Loss: 0.7909, Loss avg: 0.7942, lr: 0.004590, BT: 0.87, DT: 0.00
+Train [217/250]	rank: [1/1], Loss: 0.7937, Acc: 0.9996, Bal Acc: 0.9996, BT: 0.89, DT: 0.03,  epoch time: 33.06
+Test [217/250]	Acc: 0.9844, Bal Acc: 0.9810
+it: [10/37-218/250], rank: [1/1], Loss: 0.7934, Loss avg: 0.7921, lr: 0.004334, BT: 0.86, DT: 0.00
+it: [20/37-218/250], rank: [1/1], Loss: 0.7892, Loss avg: 0.7923, lr: 0.004334, BT: 0.87, DT: 0.00
+it: [30/37-218/250], rank: [1/1], Loss: 0.7880, Loss avg: 0.7923, lr: 0.004334, BT: 0.86, DT: 0.00
+Train [218/250]	rank: [1/1], Loss: 0.7925, Acc: 1.0000, Bal Acc: 1.0000, BT: 0.88, DT: 0.01,  epoch time: 32.49
+Test [218/250]	Acc: 0.9781, Bal Acc: 0.9670
+it: [10/37-219/250], rank: [1/1], Loss: 0.8024, Loss avg: 0.7935, lr: 0.004084, BT: 0.87, DT: 0.00
+it: [20/37-219/250], rank: [1/1], Loss: 0.8054, Loss avg: 0.7934, lr: 0.004084, BT: 0.86, DT: 0.00
+it: [30/37-219/250], rank: [1/1], Loss: 0.7944, Loss avg: 0.7941, lr: 0.004084, BT: 0.87, DT: 0.00
+Train [219/250]	rank: [1/1], Loss: 0.7941, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.02,  epoch time: 32.53
+Test [219/250]	Acc: 0.9844, Bal Acc: 0.9804
+it: [10/37-220/250], rank: [1/1], Loss: 0.7906, Loss avg: 0.7931, lr: 0.003842, BT: 0.86, DT: 0.00
+it: [20/37-220/250], rank: [1/1], Loss: 0.7985, Loss avg: 0.7939, lr: 0.003842, BT: 0.86, DT: 0.00
+it: [30/37-220/250], rank: [1/1], Loss: 0.8042, Loss avg: 0.7936, lr: 0.003842, BT: 0.87, DT: 0.00
+Train [220/250]	rank: [1/1], Loss: 0.7937, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.87, DT: 0.01,  epoch time: 32.49
+Test [220/250]	Acc: 0.9875, Bal Acc: 0.9830
+it: [10/37-221/250], rank: [1/1], Loss: 0.8067, Loss avg: 0.7937, lr: 0.003608, BT: 0.88, DT: 0.01
+it: [20/37-221/250], rank: [1/1], Loss: 0.7931, Loss avg: 0.7937, lr: 0.003608, BT: 0.87, DT: 0.00
+it: [30/37-221/250], rank: [1/1], Loss: 0.7900, Loss avg: 0.7929, lr: 0.003608, BT: 0.86, DT: 0.00
+Train [221/250]	rank: [1/1], Loss: 0.7936, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.68
+Test [221/250]	Acc: 0.9812, Bal Acc: 0.9705
+it: [10/37-222/250], rank: [1/1], Loss: 0.7872, Loss avg: 0.7926, lr: 0.003380, BT: 0.86, DT: 0.00
+it: [20/37-222/250], rank: [1/1], Loss: 0.8161, Loss avg: 0.7926, lr: 0.003380, BT: 0.86, DT: 0.00
+it: [30/37-222/250], rank: [1/1], Loss: 0.7873, Loss avg: 0.7943, lr: 0.003380, BT: 0.87, DT: 0.00
+Train [222/250]	rank: [1/1], Loss: 0.7940, Acc: 0.9987, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [222/250]	Acc: 0.9812, Bal Acc: 0.9692
+it: [10/37-223/250], rank: [1/1], Loss: 0.7902, Loss avg: 0.7964, lr: 0.003160, BT: 0.86, DT: 0.00
+it: [20/37-223/250], rank: [1/1], Loss: 0.7964, Loss avg: 0.7948, lr: 0.003160, BT: 0.87, DT: 0.00
+it: [30/37-223/250], rank: [1/1], Loss: 0.8199, Loss avg: 0.7947, lr: 0.003160, BT: 0.87, DT: 0.00
+Train [223/250]	rank: [1/1], Loss: 0.7945, Acc: 0.9992, Bal Acc: 0.9978, BT: 0.89, DT: 0.03,  epoch time: 32.98
+Test [223/250]	Acc: 0.9781, Bal Acc: 0.9683
+it: [10/37-224/250], rank: [1/1], Loss: 0.7930, Loss avg: 0.7909, lr: 0.002948, BT: 0.87, DT: 0.00
+it: [20/37-224/250], rank: [1/1], Loss: 0.7887, Loss avg: 0.7920, lr: 0.002948, BT: 0.87, DT: 0.00
+it: [30/37-224/250], rank: [1/1], Loss: 0.7918, Loss avg: 0.7925, lr: 0.002948, BT: 0.87, DT: 0.00
+Train [224/250]	rank: [1/1], Loss: 0.7926, Acc: 0.9992, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.61
+Test [224/250]	Acc: 0.9812, Bal Acc: 0.9715
+it: [10/37-225/250], rank: [1/1], Loss: 0.7990, Loss avg: 0.7926, lr: 0.002742, BT: 0.86, DT: 0.00
+it: [20/37-225/250], rank: [1/1], Loss: 0.7889, Loss avg: 0.7946, lr: 0.002742, BT: 0.87, DT: 0.01
+it: [30/37-225/250], rank: [1/1], Loss: 0.7894, Loss avg: 0.7949, lr: 0.002742, BT: 0.86, DT: 0.00
+Train [225/250]	rank: [1/1], Loss: 0.7951, Acc: 0.9987, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [225/250]	Acc: 0.9812, Bal Acc: 0.9791
+it: [10/37-226/250], rank: [1/1], Loss: 0.7929, Loss avg: 0.7931, lr: 0.002545, BT: 0.86, DT: 0.00
+it: [20/37-226/250], rank: [1/1], Loss: 0.7881, Loss avg: 0.7936, lr: 0.002545, BT: 0.86, DT: 0.00
+it: [30/37-226/250], rank: [1/1], Loss: 0.7883, Loss avg: 0.7942, lr: 0.002545, BT: 0.86, DT: 0.00
+Train [226/250]	rank: [1/1], Loss: 0.7938, Acc: 0.9996, Bal Acc: 0.9998, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [226/250]	Acc: 0.9812, Bal Acc: 0.9680
+it: [10/37-227/250], rank: [1/1], Loss: 0.7874, Loss avg: 0.7937, lr: 0.002355, BT: 0.86, DT: 0.00
+it: [20/37-227/250], rank: [1/1], Loss: 0.7899, Loss avg: 0.7958, lr: 0.002355, BT: 0.87, DT: 0.00
+it: [30/37-227/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7955, lr: 0.002355, BT: 0.87, DT: 0.00
+Train [227/250]	rank: [1/1], Loss: 0.7950, Acc: 0.9987, Bal Acc: 0.9978, BT: 0.88, DT: 0.02,  epoch time: 32.65
+Test [227/250]	Acc: 0.9812, Bal Acc: 0.9705
+it: [10/37-228/250], rank: [1/1], Loss: 0.7910, Loss avg: 0.7945, lr: 0.002172, BT: 0.86, DT: 0.00
+it: [20/37-228/250], rank: [1/1], Loss: 0.7912, Loss avg: 0.7940, lr: 0.002172, BT: 0.87, DT: 0.00
+it: [30/37-228/250], rank: [1/1], Loss: 0.7894, Loss avg: 0.7935, lr: 0.002172, BT: 0.87, DT: 0.00
+Train [228/250]	rank: [1/1], Loss: 0.7941, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.74
+Test [228/250]	Acc: 0.9875, Bal Acc: 0.9915
+it: [10/37-229/250], rank: [1/1], Loss: 0.7956, Loss avg: 0.7965, lr: 0.001997, BT: 0.87, DT: 0.00
+it: [20/37-229/250], rank: [1/1], Loss: 0.7915, Loss avg: 0.7937, lr: 0.001997, BT: 0.86, DT: 0.00
+it: [30/37-229/250], rank: [1/1], Loss: 0.7880, Loss avg: 0.7930, lr: 0.001997, BT: 0.87, DT: 0.00
+Train [229/250]	rank: [1/1], Loss: 0.7927, Acc: 0.9987, Bal Acc: 0.9963, BT: 0.89, DT: 0.03,  epoch time: 32.91
+Test [229/250]	Acc: 0.9781, Bal Acc: 0.9671
+it: [10/37-230/250], rank: [1/1], Loss: 0.7940, Loss avg: 0.7920, lr: 0.001829, BT: 0.87, DT: 0.00
+it: [20/37-230/250], rank: [1/1], Loss: 0.7902, Loss avg: 0.7925, lr: 0.001829, BT: 0.86, DT: 0.00
+it: [30/37-230/250], rank: [1/1], Loss: 0.7916, Loss avg: 0.7921, lr: 0.001829, BT: 0.86, DT: 0.00
+Train [230/250]	rank: [1/1], Loss: 0.7923, Acc: 0.9992, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.65
+Test [230/250]	Acc: 0.9781, Bal Acc: 0.9671
+it: [10/37-231/250], rank: [1/1], Loss: 0.7894, Loss avg: 0.7926, lr: 0.001669, BT: 0.86, DT: 0.00
+it: [20/37-231/250], rank: [1/1], Loss: 0.7950, Loss avg: 0.7925, lr: 0.001669, BT: 0.87, DT: 0.00
+it: [30/37-231/250], rank: [1/1], Loss: 0.7897, Loss avg: 0.7923, lr: 0.001669, BT: 0.86, DT: 0.00
+Train [231/250]	rank: [1/1], Loss: 0.7921, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.70
+Test [231/250]	Acc: 0.9781, Bal Acc: 0.9694
+it: [10/37-232/250], rank: [1/1], Loss: 0.8059, Loss avg: 0.7944, lr: 0.001517, BT: 0.87, DT: 0.01
+it: [20/37-232/250], rank: [1/1], Loss: 0.7886, Loss avg: 0.7937, lr: 0.001517, BT: 0.87, DT: 0.00
+it: [30/37-232/250], rank: [1/1], Loss: 0.7905, Loss avg: 0.7937, lr: 0.001517, BT: 0.87, DT: 0.00
+Train [232/250]	rank: [1/1], Loss: 0.7942, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.02,  epoch time: 32.75
+Test [232/250]	Acc: 0.9875, Bal Acc: 0.9736
+it: [10/37-233/250], rank: [1/1], Loss: 0.7958, Loss avg: 0.7894, lr: 0.001372, BT: 0.86, DT: 0.00
+it: [20/37-233/250], rank: [1/1], Loss: 0.7917, Loss avg: 0.7923, lr: 0.001372, BT: 0.86, DT: 0.00
+it: [30/37-233/250], rank: [1/1], Loss: 0.8002, Loss avg: 0.7928, lr: 0.001372, BT: 0.87, DT: 0.00
+Train [233/250]	rank: [1/1], Loss: 0.7940, Acc: 0.9987, Bal Acc: 0.9960, BT: 0.88, DT: 0.02,  epoch time: 32.74
+Test [233/250]	Acc: 0.9812, Bal Acc: 0.9790
+it: [10/37-234/250], rank: [1/1], Loss: 0.7910, Loss avg: 0.7913, lr: 0.001235, BT: 0.87, DT: 0.00
+it: [20/37-234/250], rank: [1/1], Loss: 0.7921, Loss avg: 0.7915, lr: 0.001235, BT: 0.87, DT: 0.00
+it: [30/37-234/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.7922, lr: 0.001235, BT: 0.87, DT: 0.00
+Train [234/250]	rank: [1/1], Loss: 0.7924, Acc: 0.9992, Bal Acc: 0.9969, BT: 0.88, DT: 0.02,  epoch time: 32.71
+Test [234/250]	Acc: 0.9812, Bal Acc: 0.9704
+it: [10/37-235/250], rank: [1/1], Loss: 0.7931, Loss avg: 0.7922, lr: 0.001106, BT: 0.86, DT: 0.00
+it: [20/37-235/250], rank: [1/1], Loss: 0.7945, Loss avg: 0.7938, lr: 0.001106, BT: 0.87, DT: 0.00
+it: [30/37-235/250], rank: [1/1], Loss: 0.7926, Loss avg: 0.7944, lr: 0.001106, BT: 0.87, DT: 0.00
+Train [235/250]	rank: [1/1], Loss: 0.7943, Acc: 0.9992, Bal Acc: 0.9966, BT: 0.89, DT: 0.03,  epoch time: 32.90
+Test [235/250]	Acc: 0.9812, Bal Acc: 0.9714
+it: [10/37-236/250], rank: [1/1], Loss: 0.7883, Loss avg: 0.7890, lr: 0.000985, BT: 0.87, DT: 0.00
+it: [20/37-236/250], rank: [1/1], Loss: 0.7936, Loss avg: 0.7944, lr: 0.000985, BT: 0.87, DT: 0.00
+it: [30/37-236/250], rank: [1/1], Loss: 0.7898, Loss avg: 0.7935, lr: 0.000985, BT: 0.87, DT: 0.00
+Train [236/250]	rank: [1/1], Loss: 0.7929, Acc: 0.9992, Bal Acc: 0.9969, BT: 0.88, DT: 0.02,  epoch time: 32.63
+Test [236/250]	Acc: 0.9812, Bal Acc: 0.9778
+it: [10/37-237/250], rank: [1/1], Loss: 0.7956, Loss avg: 0.7914, lr: 0.000871, BT: 0.87, DT: 0.00
+it: [20/37-237/250], rank: [1/1], Loss: 0.7911, Loss avg: 0.7916, lr: 0.000871, BT: 0.87, DT: 0.01
+it: [30/37-237/250], rank: [1/1], Loss: 0.7894, Loss avg: 0.7927, lr: 0.000871, BT: 0.87, DT: 0.00
+Train [237/250]	rank: [1/1], Loss: 0.7932, Acc: 0.9987, Bal Acc: 0.9965, BT: 0.88, DT: 0.02,  epoch time: 32.58
+Test [237/250]	Acc: 0.9812, Bal Acc: 0.9715
+it: [10/37-238/250], rank: [1/1], Loss: 0.7940, Loss avg: 0.7926, lr: 0.000765, BT: 0.87, DT: 0.00
+it: [20/37-238/250], rank: [1/1], Loss: 0.7965, Loss avg: 0.7929, lr: 0.000765, BT: 0.87, DT: 0.00
+it: [30/37-238/250], rank: [1/1], Loss: 0.7899, Loss avg: 0.7944, lr: 0.000765, BT: 0.87, DT: 0.00
+Train [238/250]	rank: [1/1], Loss: 0.7939, Acc: 0.9987, Bal Acc: 0.9966, BT: 0.88, DT: 0.02,  epoch time: 32.65
+Test [238/250]	Acc: 0.9781, Bal Acc: 0.9684
+it: [10/37-239/250], rank: [1/1], Loss: 0.7917, Loss avg: 0.7946, lr: 0.000667, BT: 0.86, DT: 0.00
+it: [20/37-239/250], rank: [1/1], Loss: 0.7941, Loss avg: 0.7933, lr: 0.000667, BT: 0.87, DT: 0.00
+it: [30/37-239/250], rank: [1/1], Loss: 0.7913, Loss avg: 0.7926, lr: 0.000667, BT: 0.86, DT: 0.00
+Train [239/250]	rank: [1/1], Loss: 0.7933, Acc: 0.9992, Bal Acc: 0.9981, BT: 0.88, DT: 0.02,  epoch time: 32.66
+Test [239/250]	Acc: 0.9812, Bal Acc: 0.9714
+it: [10/37-240/250], rank: [1/1], Loss: 0.7937, Loss avg: 0.7928, lr: 0.000576, BT: 0.87, DT: 0.00
+it: [20/37-240/250], rank: [1/1], Loss: 0.8079, Loss avg: 0.7932, lr: 0.000576, BT: 0.86, DT: 0.00
+it: [30/37-240/250], rank: [1/1], Loss: 0.7905, Loss avg: 0.7923, lr: 0.000576, BT: 0.86, DT: 0.00
+Train [240/250]	rank: [1/1], Loss: 0.7932, Acc: 0.9987, Bal Acc: 0.9950, BT: 0.88, DT: 0.02,  epoch time: 32.72
+Test [240/250]	Acc: 0.9750, Bal Acc: 0.9578
+it: [10/37-241/250], rank: [1/1], Loss: 0.7904, Loss avg: 0.7934, lr: 0.000494, BT: 0.87, DT: 0.00
+it: [20/37-241/250], rank: [1/1], Loss: 0.7890, Loss avg: 0.7948, lr: 0.000494, BT: 0.86, DT: 0.00
+it: [30/37-241/250], rank: [1/1], Loss: 0.7901, Loss avg: 0.7939, lr: 0.000494, BT: 0.86, DT: 0.00
+Train [241/250]	rank: [1/1], Loss: 0.7934, Acc: 0.9992, Bal Acc: 0.9978, BT: 0.88, DT: 0.02,  epoch time: 32.75
+Test [241/250]	Acc: 0.9781, Bal Acc: 0.9694
+it: [10/37-242/250], rank: [1/1], Loss: 0.8016, Loss avg: 0.7930, lr: 0.000419, BT: 0.87, DT: 0.00
+it: [20/37-242/250], rank: [1/1], Loss: 0.7947, Loss avg: 0.7933, lr: 0.000419, BT: 0.87, DT: 0.00
+it: [30/37-242/250], rank: [1/1], Loss: 0.7912, Loss avg: 0.7935, lr: 0.000419, BT: 0.86, DT: 0.00
+Train [242/250]	rank: [1/1], Loss: 0.7936, Acc: 0.9987, Bal Acc: 0.9976, BT: 0.89, DT: 0.03,  epoch time: 32.93
+Test [242/250]	Acc: 0.9781, Bal Acc: 0.9683
+it: [10/37-243/250], rank: [1/1], Loss: 0.7982, Loss avg: 0.7937, lr: 0.000352, BT: 0.86, DT: 0.00
+it: [20/37-243/250], rank: [1/1], Loss: 0.7893, Loss avg: 0.7949, lr: 0.000352, BT: 0.86, DT: 0.00
+it: [30/37-243/250], rank: [1/1], Loss: 0.7965, Loss avg: 0.7944, lr: 0.000352, BT: 0.86, DT: 0.00
+Train [243/250]	rank: [1/1], Loss: 0.7939, Acc: 0.9983, Bal Acc: 0.9964, BT: 0.88, DT: 0.02,  epoch time: 32.57
+Test [243/250]	Acc: 0.9844, Bal Acc: 0.9701
+it: [10/37-244/250], rank: [1/1], Loss: 0.7897, Loss avg: 0.7979, lr: 0.000293, BT: 0.86, DT: 0.00
+it: [20/37-244/250], rank: [1/1], Loss: 0.8047, Loss avg: 0.7995, lr: 0.000293, BT: 0.86, DT: 0.00
+it: [30/37-244/250], rank: [1/1], Loss: 0.7932, Loss avg: 0.7969, lr: 0.000293, BT: 0.86, DT: 0.00
+Train [244/250]	rank: [1/1], Loss: 0.7963, Acc: 0.9996, Bal Acc: 0.9997, BT: 0.88, DT: 0.01,  epoch time: 32.48
+Test [244/250]	Acc: 0.9781, Bal Acc: 0.9691
+it: [10/37-245/250], rank: [1/1], Loss: 0.7923, Loss avg: 0.7927, lr: 0.000242, BT: 0.87, DT: 0.01
+it: [20/37-245/250], rank: [1/1], Loss: 0.7871, Loss avg: 0.7928, lr: 0.000242, BT: 0.87, DT: 0.00
+it: [30/37-245/250], rank: [1/1], Loss: 0.7896, Loss avg: 0.7936, lr: 0.000242, BT: 0.86, DT: 0.00
+Train [245/250]	rank: [1/1], Loss: 0.7930, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [245/250]	Acc: 0.9812, Bal Acc: 0.9789
+it: [10/37-246/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7961, lr: 0.000199, BT: 0.87, DT: 0.00
+it: [20/37-246/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7942, lr: 0.000199, BT: 0.87, DT: 0.00
+it: [30/37-246/250], rank: [1/1], Loss: 0.7963, Loss avg: 0.7934, lr: 0.000199, BT: 0.86, DT: 0.00
+Train [246/250]	rank: [1/1], Loss: 0.7934, Acc: 0.9996, Bal Acc: 0.9997, BT: 0.88, DT: 0.02,  epoch time: 32.70
+Test [246/250]	Acc: 0.9844, Bal Acc: 0.9814
+it: [10/37-247/250], rank: [1/1], Loss: 0.7938, Loss avg: 0.7917, lr: 0.000163, BT: 0.87, DT: 0.00
+it: [20/37-247/250], rank: [1/1], Loss: 0.7983, Loss avg: 0.7921, lr: 0.000163, BT: 0.86, DT: 0.00
+it: [30/37-247/250], rank: [1/1], Loss: 0.7915, Loss avg: 0.7929, lr: 0.000163, BT: 0.86, DT: 0.00
+Train [247/250]	rank: [1/1], Loss: 0.7930, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.77
+Test [247/250]	Acc: 0.9844, Bal Acc: 0.9805
+it: [10/37-248/250], rank: [1/1], Loss: 0.7884, Loss avg: 0.7900, lr: 0.000135, BT: 0.86, DT: 0.00
+it: [20/37-248/250], rank: [1/1], Loss: 0.7885, Loss avg: 0.7918, lr: 0.000135, BT: 0.86, DT: 0.00
+it: [30/37-248/250], rank: [1/1], Loss: 0.7912, Loss avg: 0.7914, lr: 0.000135, BT: 0.86, DT: 0.00
+Train [248/250]	rank: [1/1], Loss: 0.7921, Acc: 0.9996, Bal Acc: 0.9996, BT: 0.88, DT: 0.02,  epoch time: 32.49
+Test [248/250]	Acc: 0.9844, Bal Acc: 0.9804
+it: [10/37-249/250], rank: [1/1], Loss: 0.7882, Loss avg: 0.7931, lr: 0.000116, BT: 0.86, DT: 0.00
+it: [20/37-249/250], rank: [1/1], Loss: 0.7960, Loss avg: 0.7938, lr: 0.000116, BT: 0.87, DT: 0.01
+it: [30/37-249/250], rank: [1/1], Loss: 0.7931, Loss avg: 0.7931, lr: 0.000116, BT: 0.86, DT: 0.00
+Train [249/250]	rank: [1/1], Loss: 0.7928, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.60
+Test [249/250]	Acc: 0.9781, Bal Acc: 0.9672
+it: [10/37-250/250], rank: [1/1], Loss: 0.7925, Loss avg: 0.7921, lr: 0.000104, BT: 0.86, DT: 0.00
+it: [20/37-250/250], rank: [1/1], Loss: 0.7990, Loss avg: 0.7921, lr: 0.000104, BT: 0.87, DT: 0.00
+it: [30/37-250/250], rank: [1/1], Loss: 0.7932, Loss avg: 0.7923, lr: 0.000104, BT: 0.87, DT: 0.00
+Train [250/250]	rank: [1/1], Loss: 0.7928, Acc: 0.9996, Bal Acc: 0.9984, BT: 0.88, DT: 0.02,  epoch time: 32.67
+Test [250/250]	Acc: 0.9812, Bal Acc: 0.9705
+Training finished - best test acc: 0.9906 at ep.: 194, time: 8748.992803096771
