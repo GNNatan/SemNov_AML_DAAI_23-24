@@ -38,4 +38,5 @@ def render_cloud(cloud:np.ndarray, title:str = None, filename:str=None) -> None:
     if filename:
         plt.savefig(filename)
     plt.clf()
+    plt.close()
 
