@@ -31,10 +31,7 @@ def render_cloud(cloud:np.ndarray,*, colors:np.array=None, cmap:str='RdYlGn', ti
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
 
-    try:
-        ax.scatter(x, -y, z, c=colors, cmap=cmap)
-    except NameError:
-        ax.scatter(x, -y, z)
+    ax.scatter(x, -y, z, c=colors, cmap=cmap)
     ax.axis('off')
     if title:
         plt.title(title)
