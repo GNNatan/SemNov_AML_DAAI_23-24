@@ -31,7 +31,7 @@ def render_cloud(cloud:np.ndarray,*, colors:np.array=None, cmap:str='RdYlGn', ti
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
 
-    if colors:
+    if colors is not None:
         ax.scatter(x, -y, z, c=colors, cmap=cmap)
     else:
         ax.scatter(x, -y, z)
