@@ -47,7 +47,7 @@ def load_model():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = DGCNN_CAMGRAD(args).to(device)
     model = nn.DataParallel(model)
-    model.load_state_dict(torch.load('dgcnn-master/pytorch/pretrained/model.1024.t7', device))
+    model.load_state_dict(torch.load('saliency/dgcnn-master/pytorch/pretrained/model.1024.t7', device))
     model = model.eval()
     return device, args, model
 
