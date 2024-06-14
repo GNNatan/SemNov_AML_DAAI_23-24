@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import warnings
 
 lab_to_text_sr1 = {
     0: 'chair',
@@ -31,7 +32,9 @@ def render_cloud(cloud:np.ndarray,*, colors:np.array=None, cmap:str='RdYlGn', ti
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
 
-    ax.scatter(x, -y, z, c=colors, cmap=cmap)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        ax.scatter(x, -y, z, c=colors, cmap=cmap)
     ax.axis('off')
     if title:
         plt.title(title)
