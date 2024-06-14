@@ -80,7 +80,7 @@ def normalize_quantile(array):
 
 def normalize_regions(array, percentile=20):
     sorted = np.sort(array)
-    split = math.floor(array.size*100/percentile)
+    split = math.floor(array.size*percentile/100)
     red = sorted[:, -split]
     green = sorted[:, split]
     colors = np.full_like(array, 500)
