@@ -23,7 +23,7 @@ lab_to_text_sr2 = {
 def load_from_file(filename):
     return torch.load(filename, map_location=torch.device('cpu'))
 
-def render_cloud(cloud:np.ndarray, title:str = None, filename:str=None) -> None:
+def render_cloud(cloud:np.ndarray,*, colors:np.array=None, cmap:str='RdYlGn', title:str = None, filename:str=None) -> None:
     x = cloud[:, 0]
     z = cloud[:, 1]
     y = cloud[:, 2]
@@ -31,7 +31,10 @@ def render_cloud(cloud:np.ndarray, title:str = None, filename:str=None) -> None:
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
 
-    ax.scatter(x, -y, z)
+    if colors:
+        ax.scatter(x, -y, z, c=colors, cmap=cmap)
+    else:
+        ax.scatter(x, -y, z)
     ax.axis('off')
     if title:
         plt.title(title)
